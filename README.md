@@ -1,4 +1,4 @@
-# time-tracker
+# **time-tracker**
 Web app for tracking time spent on activities.
 
 # Description
@@ -25,7 +25,7 @@ No need for installing anything, app is entirely **web-based** _(including datab
 # Support
 for help please contact one of the following people:
 ### owner & main contributor:
-- [Email](mailto:kiko.kribsky@gmail.com)
+- [Email](mailto:kiko.koribsky@gmail.com)
 - [LinkedIn](https://www.linkedin.com/)
 
 # Roadmap
@@ -37,7 +37,7 @@ for help please contact one of the following people:
 This private repository is currently closed to contributors.
 
 # Authors and acknowledgment
-- **author & main contributor:** [Kristián Koribský](https://linktr.ee/)
+- **author & main contributor:** [Kristián Koribský](https://github.com/kriskoribsky)
 
 # License
 **Closed-source** project, <u>no licence</u>
