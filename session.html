@@ -88,8 +88,10 @@
                 </div>
 
                 <li>
-                    <i class="fa-solid fa-gauge-high"></i>
-                    <a href="index.html">Dashboard</a>
+                    <a href="index.html">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Dashboard</span>
+                    </a>
                 </li>
 
                 <div class="nav-section">
@@ -97,9 +99,18 @@
                     <p class="nav-section-name">Tracking</p>
                 </div>
 
-                <li class="active">
-                    <i class="fa-solid fa-file-circle-plus"></i>
-                    <a href="session.html">Add session</a>
+                  <li>
+                    <a href="task.html">
+                        <i class="fa-solid fa-file-circle-plus"></i>
+                        <span>Add task</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="session.html">
+                        <i class="fa-regular fa-square-plus"></i>
+                        <span>Add session</span>
+                    </a>
                 </li>
 
                 <div class="nav-section">
@@ -108,12 +119,35 @@
                 </div>
 
                 <li>
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <a href="">Charts</a>
+                    <a href="#">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        <span>Charts</span>
+                    </a>
                 </li>
                 <li>
-                    <i class="fa-solid fa-table-columns"></i>
-                    <a href="">Tables</a>
+                    <a href="#">
+                        <i class="fa-solid fa-table-columns"></i>
+                        <span>Tables</span>
+                    </a>
+                </li>
+
+                <div class="nav-section">
+                    <hr class="nav-divide">
+                    <p class="nav-section-name">Other</p>
+                </div>
+
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <span>Configuration</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Settings</span>
+                    </a>
                 </li>
 
             </ul>
@@ -122,39 +156,107 @@
 
     </header>
 
-    <main>
+    <div class="main-footer">
 
-        <ul class="top-nav shadow">
+        <main>
 
-            <li>
+            <ul class="top-nav shadow">
 
-                <form action="">
+                <li>
 
-                    <input type="text" placeholder="Search for..."><button><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <form action="">
 
-                </form>
+                        <input type="text" placeholder="Search for..."><button><i class="fa-solid fa-magnifying-glass"></i></button>
 
-            </li>
+                    </form>
 
-            <li class="user">
-                <a href="">
-                    <span>Kristián Koribský</span>
-                    <img src="img/undraw_profile.svg" alt="profile picture">
-                </a>
-            </li>
+                </li>
 
-        </ul>
+                <li class="user">
+                    <a href="">
+                        <span>Kristián Koribský</span>
+                        <img src="img/undraw_profile.svg" alt="profile picture">
+                    </a>
+                </li>
 
-        <div class="main-content">
+            </ul>
 
-            <h1>Working session</h1>
+            <div class="main-content">
 
-        </div>
+                <h1>Sessions</h1>
+
+                <section class="data-section shadow add-session">
+
+                    <h2>Track new working session</h2>
+
+                    <form class="form" action="">
+
+                        <div class="form-row">
+                            <label for="project-selection">Project:</label>
+                            <select class="selection-dropdown" name="" id="project-selection">
+
+                                <option value="">Choose a project</option>
+                                <option value="">Jobin</option>
+                                <option value="">Elcop</option>
+                                <option value="">Elcop-prihlaska</option>
+                                <option value="">MiniRelaxMier</option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="task-selection">Task:</label>
+                            <select class="selection-dropdown" name="" id="task-selection">
+
+                                <option value="">Choose a task</option>
+                                <option value="">Searcher</option>
+                                <option value="">Price list</option>
+                                <option value="">Registry form</option>
+
+                            </select>
+                        </div>
+
+                        <hr class="form-divide">
+
+                        <div class="form-row">
+
+                            <label>
+                                <span>Started: </span>
+                                <input class="time-input" type="text" placeholder="11:00">
+                            </label>
+                            
+                            <label>
+                                <span>Finished: </span>
+                                <input class="time-input" type="text" placeholder="17:45">
+                            </label>
+                            
+                        </div>
+
+                        <div class="form-row">
+                            <button type="submit" class="form-btn btn-submit">
+                                <i class="fa-solid fa-check"></i><span>Submit</span>
+                            </button>
+                        </div>
+
+                        <div class="alert danger hidden" role="alert">Please enter the correct time format and try again.</div>
+
+                    </form>
 
 
-    </main>
+                </section>
 
-    <footer></footer>
+            </div>
+
+
+        </main>
+
+        <footer>
+
+            <span>Copyright © Time-tracker 2022</span>
+
+        </footer>
+
+    </div>
 
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
