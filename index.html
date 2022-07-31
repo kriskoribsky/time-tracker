@@ -61,7 +61,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <!-- scripts -->
-    <script src="assets/js/main.js" defer></script>
+    <script src="js/main.js" defer></script>
 
     <!-- favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
@@ -69,6 +69,47 @@
 
 </head>
 <body class="wrapper">
+
+    <div class="modal" id="create-project-modal" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <form aciton="" class="modal-content form">
+
+                <div class="modal-header">
+                    
+                    <h5 class="modal-title">Create new project</h5>
+
+                    <a type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        <label>
+                            <span>Project name: </span>
+                            <input type="text" autofocus>
+                        </label>
+                    </p>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <a class="form-btn modal-btn btn-secondary" data-dismiss="modal">
+                        <span>Close</span>
+                    </a>
+
+                    <button class="form-btn modal-btn  btn-primary" type="submit">
+                        <span>Save project</span>
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
 
     <header>
 
@@ -87,9 +128,11 @@
                     <hr class="nav-divide">
                 </div>
 
-                <li class="active">
-                    <i class="fa-solid fa-gauge-high"></i>
-                    <a href="index.html">Dashboard</a>
+                <li>
+                    <a href="index.html" class="active">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Dashboard</span>
+                    </a>
                 </li>
 
                 <div class="nav-section">
@@ -98,8 +141,17 @@
                 </div>
 
                 <li>
-                    <i class="fa-solid fa-file-circle-plus"></i>
-                    <a href="session.html">Add session</a>
+                    <a href="task.html">
+                        <i class="fa-solid fa-file-circle-plus"></i>
+                        <span>Add task</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="session.html">
+                        <i class="fa-regular fa-square-plus"></i>
+                        <span>Add session</span>
+                    </a>
                 </li>
 
                 <div class="nav-section">
@@ -108,12 +160,35 @@
                 </div>
 
                 <li>
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <a href="">Charts</a>
+                    <a href="#">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        <span>Charts</span>
+                    </a>
                 </li>
                 <li>
-                    <i class="fa-solid fa-table-columns"></i>
-                    <a href="">Tables</a>
+                    <a href="#">
+                        <i class="fa-solid fa-table-columns"></i>
+                        <span>Tables</span>
+                    </a>
+                </li>
+
+                <div class="nav-section">
+                    <hr class="nav-divide">
+                    <p class="nav-section-name">Other</p>
+                </div>
+
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <span>Configuration</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Settings</span>
+                    </a>
                 </li>
 
             </ul>
@@ -122,39 +197,253 @@
 
     </header>
 
-    <main>
+    <div class="main-footer">
 
-        <ul class="top-nav shadow">
+        <main>
 
-            <li>
+            <ul class="top-nav shadow">
 
-                <form action="">
+                <li>
 
-                    <input type="text" placeholder="Search for..."><button><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <form action="">
 
-                </form>
+                        <input type="text" placeholder="Search for..."><button><i class="fa-solid fa-magnifying-glass"></i></button>
 
-            </li>
+                    </form>
 
-            <li class="user">
-                <a href="">
-                    <span>Kristián Koribský</span>
-                    <img src="img/undraw_profile.svg" alt="profile picture">
-                </a>
-            </li>
+                </li>
 
-        </ul>
+                <li class="user">
+                    <a href="">
+                        <span>Kristián Koribský</span>
+                        <img src="img/undraw_profile.svg" alt="profile picture">
+                    </a>
+                </li>
 
-        <div class="main-content">
+            </ul>
 
-            <h1>Dashboard</h1>
+            <div class="main-content">
 
-        </div>
+                <h1>
+                    <span>Your projects</span>
+                    <a class="heading-icon" data-toggle="modal" data-target="#create-project-modal" href="#" title="Create new project"><i class="fa-solid fa-square-plus"></i></a>
+                </h1>
 
+                <div class="content-statistics-wrapper">
 
-    </main>
+                    <div class="content-statistics-wrapper-projects">
 
-    <footer></footer>
+                        <section class="data-section project-section shadow width-100">
+
+                            <h2>Elcop</h2>
+
+                            <table class="project-info">
+
+                                <tr>
+                                    <th>Date created:</th>
+                                    <td>30.7.2022</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Number of tasks:</th>
+                                    <td>5</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Unpaid work-time:</th>
+                                    <td class="text-green">5 hours 1 minute</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total project work-time:</th>
+                                    <td>104 hours 54 minutes</td>
+                                </tr>
+
+                            </table>
+
+                            <div class="controls hidden"></div>
+
+                        </section>
+
+                        <section class="data-section project-section shadow width-100">
+
+                            <h2>Jobin</h2>
+
+                            <table class="project-info">
+
+                                <tr>
+                                    <th>Date created:</th>
+                                    <td>20.6.2021</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Number of tasks:</th>
+                                    <td>985</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Unpaid work-time:</th>
+                                    <td class="text-green">1 hour 0 minutes</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total project work-time:</th>
+                                    <td>1586 hours 20 minutes</td>
+                                </tr>
+
+                            </table>
+
+                            <div class="controls hidden"></div>
+
+                        </section>
+
+                        <section class="data-section project-section shadow width-100">
+
+                            <h2>Elcop - prihlaska</h2>
+
+                            <table class="project-info">
+
+                                <tr>
+                                    <th>Date created:</th>
+                                    <td>30.7.2022</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Number of tasks:</th>
+                                    <td>0</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total project work-time:</th>
+                                    <td>1586 hours 20 minutes</td>
+                                </tr>
+
+                            </table>
+
+                            <div class="controls hidden"></div>
+
+                        </section>
+
+                        <section class="data-section project-section shadow width-100">
+
+                            <h2>MiniRelaxMier</h2>
+
+                            <table class="project-info">
+
+                                <tr>
+                                    <th>Date created:</th>
+                                    <td>1.8.2022</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Number of tasks:</th>
+                                    <td>15</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Unpaid work-time:</th>
+                                    <td class="text-green">89 hours 59 minutes</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total project work-time:</th>
+                                    <td>3 hours 20 minutes</td>
+                                </tr>
+
+                            </table>
+
+                            <div class="controls hidden"></div>
+
+                        </section>
+
+                        <section class="data-section project-section shadow width-100">
+
+                            <h2>Time-tracker</h2>
+
+                            <table class="project-info">
+
+                                <tr>
+                                    <th>Date created:</th>
+                                    <td>28.7.2022</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Number of tasks:</th>
+                                    <td>5</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total project work-time:</th>
+                                    <td>1 hours 20 minutes</td>
+                                </tr>
+
+                            </table>
+
+                            <div class="controls hidden"></div>
+
+                        </section>
+
+                    </div>
+
+                    <div class="content-statistics-wrapper-statistics">
+
+                        <section class="data-section overall-statistics shadow">
+
+                            <h2>Overall statistics</h2>
+
+                            <canvas></canvas>
+
+                            <table class="text-left">
+
+                                <tr>
+                                    <th>Working time past 7 days:</th>
+                                    <td>56 hours 41 minutes</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total unpaid work-time:</th>
+                                    <td class="text-green">56 hours 41 minutes</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Hourly wage:</th>
+                                    <th>6 €</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Salary:</th>
+                                    <td class="text-green"><strong>339,99 €</strong></td>
+                                </tr>
+
+                            </table>
+
+                            <div class="overall-statistics-foot">
+
+                                <hr>
+
+                                <button type="submit" class="form-btn btn-danger">
+                                   <i class="fa-solid fa-clock"></i><span>Checkout</span>
+                                </button>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer>
+
+            <span>Copyright © Time-tracker 2022</span>
+
+        </footer>
+        
+    </div>
 
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
