@@ -15,6 +15,8 @@
     --danger-red-bg: #f8d7da;
     --success-green-text: #155724;
     --success-green-bg: #d4edda;
+    --warning-yellow-text: #856404;
+    --warning-yellow-bg: #fff3cd;
 
     /* widths */
     --sidebar-width: 224px;
@@ -399,6 +401,11 @@ main {
     background-color: var(--success-green-bg);
 }
 
+.warning {
+    color: var(--warning-yellow-text);
+    background-color: var(--warning-yellow-bg);
+}
+
 .main-footer {
     width: 100%;
     display: flex;
@@ -495,7 +502,6 @@ table th, table td {
 }
 
 .modal-dialog {
-
     /* slide in animation for dialog window  */
     transform: translateY(-25%);
     transition: transform 300ms ease-out;
@@ -553,6 +559,10 @@ table th, table td {
     justify-content: space-between;
 }
 
+.modal-body {
+    line-height: 1.5;
+}
+
 .modal-body p {
     margin-bottom: 0.8em;
 }
@@ -562,6 +572,7 @@ table th, table td {
 }
 
 .modal-btn {
+    line-height: normal;
     margin-top: 0;
 }
 

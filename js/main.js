@@ -31,28 +31,23 @@
     
     })
 
-
-
     // get all elements with data-target attribute and bind them to their targer
     document.querySelectorAll('a[data-toggle][data-target], button[data-toggle][data-target]').forEach(element => {
-        console.log(element);
-
         const targetElement = document.getElementById(element.getAttribute('data-target').substring(1));
         // class to add to a target element
         const targetClass = components[element.getAttribute('data-toggle')];
 
-        console.log(targetElement, targetClass);
+        if (targetElement && targetClass) {
+            // add button/a event listener
+            element.addEventListener('click', event => {
+                event.preventDefault();
 
-        // add button/a event listener
-        element.addEventListener('click', event => {
-            event.preventDefault();
-
-            targetElement.style.display = 'block';
-            setTimeout(() => {
-                targetElement.classList.add(targetClass);
-            }, 1);
-            console.log('click');
-        })
-        
+                targetElement.style.display = 'block';
+                setTimeout(() => {
+                    targetElement.classList.add(targetClass);
+                }, 1);
+                console.log('click');
+            })
+        }
     })
 }
