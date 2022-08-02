@@ -61,7 +61,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <!-- scripts -->
-    <script src="assets/js/main.js" defer></script>
+    <script src="js/main.js" defer></script>
 
     <!-- favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
@@ -69,6 +69,8 @@
 
 </head>
 <body class="wrapper">
+
+    <?php require_once 'inc/modals.php'; ?>
 
     <header>
 
@@ -88,7 +90,7 @@
                 </div>
 
                 <li>
-                    <a href="index.html">
+                    <a href="index.html" class="active">
                         <i class="fa-solid fa-gauge-high"></i>
                         <span>Dashboard</span>
                     </a>
@@ -180,72 +182,3 @@
                 </li>
 
             </ul>
-
-            <div class="main-content">
-
-                <h1>Tasks</h1>
-
-                <section class="data-section shadow add-session">
-
-                    <h2>Add new tasks to your projects</h2>
-
-                    <form class="form" action="">
-
-                        <div class="form-row">
-                            <label for="project-selection">Project:</label>
-                            <select class="selection-dropdown" name="" id="project-selection">
-
-                                <option value="">Choose a project</option>
-                                <option value="">Jobin</option>
-                                <option value="">Elcop</option>
-                                <option value="">Elcop-prihlaska</option>
-                                <option value="">MiniRelaxMier</option>
-
-                            </select>
-                        </div>
-
-                        <hr class="form-divide">
-
-                        <div class="form-row">
-
-                            <label>
-                                <span>Task name: </span>
-                                <input type="text">
-                            </label>
-
-                        </div>
-
-                        <div class="form-row">
-                            <button type="submit" class="form-btn btn-submit">
-                                <i class="fa-solid fa-check"></i><span>Add</span>
-                            </button>
-                        </div>
-
-                        <div class="alert danger hidden" role="alert">Please choose a valid project and try again</div>
-
-                    </form>
-
-                </section>
-
-            </div>
-
-
-        </main>
-
-        <footer>
-
-            <span>Copyright © Time-tracker 2022</span>
-
-        </footer>
-
-    </div>
-
-    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-    <script>
-        window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
-        ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
-    </script>
-    <script src="https://www.google-analytics.com/analytics.js" async></script>
-
-</body>
-</html>
