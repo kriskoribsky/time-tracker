@@ -1,3 +1,5 @@
+<?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'templates', 'inc', 'header.php'); ?>
+
 <div class="main-content">
 
     <h1>
@@ -211,3 +213,5 @@
     </div>
 
 </div>
+
+<?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'templates', 'inc', 'footer.php'); ?>

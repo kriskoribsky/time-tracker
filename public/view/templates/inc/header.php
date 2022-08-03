@@ -49,8 +49,8 @@
     <meta name="theme-color" content="#da2c2c"> -->
 
     <!-- stylesheets -->
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/time-tracker/public/view/css/normalize.css">
+    <link rel="stylesheet" href="/time-tracker/public/view/css/main.css">
 
     <!-- font awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -61,11 +61,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <!-- scripts -->
-    <script src="js/main.js" defer></script>
+    <script src="/time-tracker/public/view/js/main.js" defer></script>
 
     <!-- favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/time-tracker/public/view/assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/time-tracker/public/view/assets/img/favicons/favicon-16x16.png">
 
 </head>
 <body class="wrapper">
