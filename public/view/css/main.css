@@ -579,3 +579,8 @@ table th, table td {
 .modal-btn span {
     display: inline-block;
 }
+
+.http-error-msg {
+    font-style: italic;
+    text-transform: capitalize;
+}

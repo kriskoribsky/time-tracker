@@ -1,4 +1,4 @@
-<?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'templates', 'inc', 'header.php'); ?>
+<?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'inc', 'header.php'); ?>
 
 <div class="main-content">
 
@@ -214,4 +214,4 @@
 
 </div>
 
-<?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'templates', 'inc', 'footer.php'); ?>
+<?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'inc', 'footer.php'); ?>

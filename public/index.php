@@ -11,6 +11,7 @@ require_once(PRIVATE_PATH . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR
 // Modules
 // ==========================================================================
 $modules = [
+    'router',
     'database'
 ];
 
@@ -18,6 +19,9 @@ foreach ($modules as $module) {
     require_once Helper\Path::build_path(PRIVATE_PATH, 'modules', $module . '.php');
 }
 
-// Landing page
+// Page routing
 // ==========================================================================
-require_once(Helper\Path::build_path(PUBLIC_PATH, 'view', 'templates', 'dashboard.php'));
+require_once(Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'dashboard.php'));
+require_once(Helper\Path::build_path(PRIVATE_PATH, 'modules', 'router.php'));
+
+echo $_SERVER['REQUEST_URI'];

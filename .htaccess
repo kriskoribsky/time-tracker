@@ -1,1 +1,54 @@
-DirectoryIndex public/index.php
+# Index page
+# DirectoryIndex index.php
+
+# Rewrite rules
+# ==========================================================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent image hotlinking
+
+    # Silent redirect to 404 on non-existent page/directory
+    # RewriteCond %{REQUEST_FILENAME} !-f    
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule .* public/view/pages/404.php [L]
+
+    # Set fallback for non-existent files/directories
+    # FallbackResource view/error.php
+
+    # Front controller route all files (except jpe?g|png|gif|css|js)
+    # RewriteCond %{REQUEST_URI} !\.(jpe?g|png|gif|css|js)$ [NC]
+    # RewriteRule ^(?!index\.php)(.+)$ index.php [NC,QSA,L]
+
+    # Front controller routing for existent files/directories
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteRule .* /index.php [L,QSA]
+
+    # Redirect everything except resource files to the Front Controller
+    RewriteCond %{REQUEST_URI} !^/index.php$
+    RewriteCond %{REQUEST_URI} !\.(gif|jpe?g|png|svg|css|js)$
+    RewriteRule .* /index.php [L,QSA]
+
+
+
+</IfModule>
+
+# Custom error pages
+# ==========================================================================
+# Bad request
+# ErrorDocument 400 /custom_40x.html
+# Unathorized
+# ErrorDocument 401 /custom_40x.html
+# Forbidden
+# ErrorDocument 403 /custom_40x.html
+# Not found
+# ErrorDocument 404 /public/view/pages/errors/404.php
+
+# # Internal server error
+# ErrorDocument 500 /custom_50x.html
+# # Gateway error
+# ErrorDocument 502 /custom_50x.html
+# # Service unavailable
+# ErrorDocument 503 /custom_50x.html
+# # Gateway timeout
+# ErrorDocument 504 /custom_50x.html
