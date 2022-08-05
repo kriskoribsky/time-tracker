@@ -25,8 +25,8 @@ class Debug {
                 var_dump($var);
         }
 
-        if ($exit) {
-            echo "<br><u>Exit called from:</u><br>\t";
+        if ($exit === true) {
+            echo "<br><u>Exit called from:</u><br>";
 
             debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
