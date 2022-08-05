@@ -8,7 +8,7 @@
 
         <h4 class="text-center">Page not found</h4>
 
-        <p class="text-center">I looks like the page you are looking for doesn't exist.</p>
+        <p class="text-center">It looks like the page you are looking for doesn't exist.</p>
         <p><a href="/dashboard">← Back to dashboard</a></p>
 
     </div>
