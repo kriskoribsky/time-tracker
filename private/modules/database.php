@@ -13,12 +13,15 @@ final class Database {
         PDO::ATTR_EMULATE_PREPARES   => false
     ];
 
+    // for error catching
+    public const MYSQL_DUPLICATE_CODES = [1062, 23000];
+    
     private function __construct() {}
 
     // prevent multiple connections to database
     private static function connect(): PDO | false {
         if (!self::$database_connection) {
-            echo 'connecting to db<br>';
+            // Helper\Debug::log('connecting to db');
 
 
             $pdo = new PDO(self::DNS, DB_USER, DB_PASS, self::OPTIONS);
@@ -28,14 +31,16 @@ final class Database {
     }
 
     public static function query(string $sql, array $placeholder_values = null, int $fetch_mode = PDO::FETCH_DEFAULT): mixed {
-        echo 'gettting conection to db<br>';
+        // Helper\Debug::log('gettting conection from db');
         $connection = self::connect();
 
         if ($placeholder_values) {
+            // Helper\Debug::log('prepare query');
             $pdo_statement = $connection->prepare($sql);
             $pdo_statement->execute($placeholder_values);
         }
         else {
+            // Helper\Debug::log('classic query');
             $pdo_statement = $connection->query($sql);
         }
 
