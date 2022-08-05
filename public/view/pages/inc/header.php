@@ -49,8 +49,8 @@
     <meta name="theme-color" content="#da2c2c"> -->
 
     <!-- stylesheets -->
-    <link rel="stylesheet" href="/public/view/css/normalize.css">
-    <link rel="stylesheet" href="/public/view/css/main.css">
+    <link rel="stylesheet" href="/view/css/normalize.css">
+    <link rel="stylesheet" href="/view/css/main.css">
 
     <!-- font awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -61,11 +61,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <!-- scripts -->
-    <script src="/public/view/js/main.js" defer></script>
+    <script src="/view/js/main.js" defer></script>
 
     <!-- favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/view/assets/img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/view/assets/img/favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/view/assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/view/assets/img/favicons/favicon-16x16.png">
 
 </head>
 <body class="wrapper">
@@ -90,7 +90,7 @@
                 </div>
 
                 <li>
-                    <a href="/" class="active">
+                    <a href="/dashboard" class="<?php echo ($_SERVER['REQUEST_URI'] == '/dashboard' || $_SERVER['REQUEST_URI'] == '/') ? 'active' : ''; ?>">
                         <i class="fa-solid fa-gauge-high"></i>
                         <span>Dashboard</span>
                     </a>
@@ -102,14 +102,14 @@
                 </div>
 
                 <li>
-                    <a href="/view/pages/task.php">
+                    <a href="/tasks" class="<?php echo $_SERVER['REQUEST_URI'] == '/tasks' ? 'active' : ''; ?>">
                         <i class="fa-solid fa-file-circle-plus"></i>
-                        <span>Add task</span>
+                        <span>Manage tasks</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="/view/pages/session.php">
+                    <a href="/sessions" class="<?php echo $_SERVER['REQUEST_URI'] == '/sessions' ? 'active' : ''; ?>">
                         <i class="fa-regular fa-square-plus"></i>
                         <span>Add session</span>
                     </a>
@@ -177,7 +177,7 @@
                 <li class="user">
                     <a href="">
                         <span>Kristián Koribský</span>
-                        <img src="/public/view/assets/img/undraw_profile.svg" alt="profile picture">
+                        <img src="/view/assets/img/undraw_profile.svg" alt="profile picture">
                     </a>
                 </li>
 
