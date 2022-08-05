@@ -1,3 +1,10 @@
+<?php 
+# query database for projects
+$projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM projects ORDER BY date_created DESC"));
+?>
+
+
+
 <?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'inc', 'header.php'); ?>
 
 <div class="main-content">
@@ -11,7 +18,44 @@
 
         <div class="content-statistics-wrapper-projects">
 
-            <section class="data-section project-section shadow width-100">
+            <?php foreach($projects as $project): ?>
+
+                <section class="data-section project-section shadow width-100">
+
+                    <h2><?php echo $project['title']; ?></h2>
+
+                    <table class="project-info">
+
+                        <tr>
+                            <th>Date created:</th>
+                            <td><?php echo implode('.', array_reverse(explode('-', explode(' ', $project['date_created'])[0]))); ?></td>
+                        </tr>
+
+                        <tr>
+                            <th>Number of tasks:</th>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <th>Unpaid work-time:</th>
+                            <td class="text-green">5 hours 1 minute</td>
+                        </tr>
+
+                        <tr>
+                            <th>Total project work-time:</th>
+                            <td>104 hours 54 minutes</td>
+                        </tr>
+
+                    </table>
+
+                    <div class="controls hidden"></div>
+
+                </section>
+
+            <?php endforeach; ?>
+
+
+            <!-- <section class="data-section project-section shadow width-100">
 
                 <h2>Elcop</h2>
 
@@ -160,6 +204,8 @@
                 <div class="controls hidden"></div>
 
             </section>
+
+            -->
 
         </div>
 

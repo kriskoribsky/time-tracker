@@ -144,7 +144,7 @@ p {
 }
 
 .nav a {
-    opacity: 0.8;
+    opacity: 0.68;
 }
 
 .nav a:hover {
@@ -267,9 +267,9 @@ main {
     height: 32px;
 }
 
-.add-session {
+/* .add-session {
     max-width: 36%;
-}
+} */
 
 .data-section {
     background-color: white;
@@ -337,6 +337,8 @@ main {
 
 .form-divide {
     margin: 2em 0;
+    border-color: var(--primary-color);
+    opacity: 0.28;
 }
 
 .form-btn {
@@ -605,4 +607,41 @@ table th, table td {
 
 .http-error a:hover {
     text-decoration: underline;
+}
+
+.content-statistics-wrapper .browse-tasks {
+    height: 12em;
+}
+
+.content-statistics-wrapper .add-session {
+    flex-basis: 40%;
+}
+
+.content-statistics-wrapper-browse {
+    flex-basis: 60%;
+}
+
+.session-padding {
+    padding-bottom: 1em;
+}
+
+.int-input {
+    width: 10ch;
+}
+
+.button-margin {
+    margin-top: 2em;
+}
+
+.next-day-checkbox {
+    display: inline-flex;
+    align-items: center;
+
+    margin-left: 2em;
+    user-select: none;
+}
+
+.next-day-checkbox input {
+    margin-left: 0.4em;
+    /* accent-color: (--bg-color); */
 }

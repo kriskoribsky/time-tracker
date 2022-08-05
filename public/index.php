@@ -12,7 +12,9 @@ require_once(PRIVATE_PATH . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR
 // ==========================================================================
 $modules = [
     'router',
-    'database'
+    'database',
+    'sanitize',
+    'format'
 ];
 
 foreach ($modules as $module) {
@@ -21,7 +23,7 @@ foreach ($modules as $module) {
 
 // Page routing
 // ==========================================================================
-require_once(Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'dashboard.php'));
 require_once(Helper\Path::build_path(PRIVATE_PATH, 'modules', 'router.php'));
 
-echo $_SERVER['REQUEST_URI'];
+$router = new Router();
+$router->process_uri($_SERVER['REQUEST_URI'], $_GET, $_POST);
