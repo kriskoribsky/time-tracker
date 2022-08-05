@@ -6,6 +6,7 @@
     --text-light: #fff;
     --text-black: #212529;
     --text-grey: #5a5c69;
+    --text-grey-light: #b7b9cc;
     --section-heading-bg: #f8f9fc;
     --section-text-color: #858796;
     --yellow-color: #f6c23e;
@@ -580,7 +581,28 @@ table th, table td {
     display: inline-block;
 }
 
-.http-error-msg {
+.http-error h1 {
+    font-size: 7rem;
+    display: block;
+    padding: 0;
+}
+
+.http-error h4 {
     font-style: italic;
     text-transform: capitalize;
+    margin: 0 0 4em 0;
+}
+
+.http-error p {
+    font-size: 0.96em;
+    color: var(--text-grey-light);
+    margin-bottom: 0.38em;
+}
+
+.http-error a {
+    color: var(--primary-color);
+}
+
+.http-error a:hover {
+    text-decoration: underline;
 }
