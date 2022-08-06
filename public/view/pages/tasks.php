@@ -30,26 +30,26 @@ foreach ($projects as $project) {
 
         <div class="content-statistics-wrapper-browse">
 
-            <section class="data-section shadow browse-tasks">
+            <section class="data-section shadow browse-tasks project-select">
+                
+                <form class="form form-heading" action="<?php echo Sanitize::sanitize_html($_SERVER['REQUEST_URI']); ?>" method="POST">
+                    <div class="double-header">
+                        <h2>Browse tasks</h2>
 
-                <h2>Browse tasks</h2>
+                        <div>
+                            <label for="project-selection">Project:</label>
+                            <select onchange='if(this.value != 0) { this.form.submit(); }' class="selection-dropdown" name="submit-project" id="project-selection" >
 
-                <form class="form" action="<?php echo Sanitize::sanitize_html($_SERVER['REQUEST_URI']); ?>" method="POST">
+                                <option value="" disabled hidden <?php echo $_POST['submit-project'] ?? 'selected'; ?>>Choose a project</option>
+                                <?php foreach($projects as $project): ?>
+                                    <option <?php echo (isset($_POST['submit-project']) && $_POST['submit-project'] === $project['id']) ? 'selected' : null; ?> value="<?php echo $project['id'] ?>"><?php echo $project['title']; ?></option>
+                                <?php endforeach; ?>
 
-                    <div class="form-row">
-                        <label for="project-selection">Project:</label>
-                        <select onchange='if(this.value != 0) { this.form.submit(); }' class="selection-dropdown" name="submit-project" id="project-selection" >
+                            </select>
+                        </div>
 
-                            <option value="" disabled hidden <?php echo $_POST['submit-project'] ?? 'selected'; ?>>Choose a project</option>
-                            <?php foreach($projects as $project): ?>
-                                <option <?php echo (isset($_POST['submit-project']) && $_POST['submit-project'] === $project['id']) ? 'selected' : null; ?> value="<?php echo $project['id'] ?>"><?php echo $project['title']; ?></option>
-                            <?php endforeach; ?>
-
-                        </select>
                     </div>
-
-                    <hr class="form-divide">
-
+                    
                 </form>
 
             </section>
@@ -95,7 +95,7 @@ foreach ($projects as $project) {
         <!-- add-session part -->
         <?php if(isset($_POST['submit-project'])): ?>
 
-            <div class="add-session">
+            <div class="add-task">
 
                 <section class="data-section shadow">
 
