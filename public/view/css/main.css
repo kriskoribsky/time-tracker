@@ -1,6 +1,7 @@
 :root {
     --primary-color: #4e73df;
     --primary-color-rgb: rgb(78, 115, 223);
+    --primary-color-input-rgba: rgb(78, 115, 223, 0.1);
     --secondary-color: #858796;
     --bg-color: #f8f9fc;
     --text-light: #fff;
@@ -18,6 +19,7 @@
     --success-green-bg: #d4edda;
     --warning-yellow-text: #856404;
     --warning-yellow-bg: #fff3cd;
+    --warning-color: #f6c23e;
 
     /* widths */
     --sidebar-width: 224px;
@@ -267,9 +269,9 @@ main {
     height: 32px;
 }
 
-/* .add-session {
-    max-width: 36%;
-} */
+.add-session {
+    max-width: 44%;
+}
 
 .data-section {
     background-color: white;
@@ -316,6 +318,7 @@ main {
     padding: 0.7em 0.9em;
     margin: 0;
     border: 0;
+    border-radius: 8px;
 }
 
 .time-input {
@@ -387,6 +390,10 @@ main {
     background-color: var(--secondary-color);
 }
 
+.btn-warning {
+    margin-top: 1em;
+    background-color: var(--warning-color);
+}
 
 .alert {
     padding: 0.8em 1.2em;
@@ -613,7 +620,7 @@ table th, table td {
     height: 12em;
 }
 
-.content-statistics-wrapper .add-session {
+.content-statistics-wrapper .add-task {
     flex-basis: 40%;
 }
 
@@ -644,4 +651,62 @@ table th, table td {
 .next-day-checkbox input {
     margin-left: 0.4em;
     /* accent-color: (--bg-color); */
+}
+
+.btn-with-alert {
+    margin-top: 0em;
+}
+
+.a-btn {
+    display: inline-block;
+}
+
+.a-btn-and-btn {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1em;
+}
+
+.calculated-time {
+    margin-left: 2em;
+    color: var(--green-color);
+}
+
+.calculated-time::before {
+    content: '= ';
+}
+
+.calculated-time-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input:disabled {
+    background-color: var(--primary-color-input-rgba);
+}
+
+.configuration-options {
+    width: 38%;
+}
+
+.double-header {
+    padding: 1em 1.2em;
+    background-color: var(--section-heading-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.double-header h2 {
+    background-color: transparent;
+    border: none;
+}
+
+.form-heading {
+    padding: 0;
+}
+
+.browse-tasks.project-select {
+    height: auto;
 }
