@@ -34,6 +34,9 @@ class Router {
             case '/forms':
                 require_once Helper\Path::build_path(PRIVATE_PATH, 'controller', 'forms.php');
                 break;
+            case '/configuration':
+                require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'configuration.php');
+                break;
             default:
                 require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'errors', '404.php');
         }

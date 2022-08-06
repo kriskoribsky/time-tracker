@@ -139,7 +139,7 @@
                 </div>
 
                 <li>
-                    <a href="#">
+                    <a href="/configuration" class="<?php echo $_SERVER['REQUEST_URI'] == '/configuration' ? 'active' : ''; ?>">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                         <span>Configuration</span>
                     </a>
