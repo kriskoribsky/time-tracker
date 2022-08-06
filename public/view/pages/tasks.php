@@ -9,6 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tasks = Sanitize::sanitize_html_query(Database::query($sql, ['selected_project' => $_POST['submit-project']]));
     }
 }
+
+// map project ids to their titles (for hidden input value in 'task add' section)
+$ids = [];
+
+foreach ($projects as $project) {
+    $ids[$project['id']] = $project['title'];
+}
+
 ?>
 
 <?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'inc', 'header.php'); ?>
@@ -85,54 +93,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <!-- add-session part -->
-        <div class="add-session">
+        <?php if(isset($_POST['submit-project'])): ?>
 
-            <section class="data-section shadow">
+            <div class="add-session">
 
-                <h2>Add new tasks to your projects</h2>
+                <section class="data-section shadow">
 
-                <form class="form" action="/forms" method="POST">
+                    <h2>Add new tasks to your project</h2>
 
-                    <div class="form-row">
-                        <label for="project-selection">Project:</label>
-                        <select class="selection-dropdown" name="project-id" id="project-selection" required>
+                    <form class="form" action="/forms" method="POST">
 
-                            <option value="" selected disabled hidden>Choose a project</option>
-                            <?php foreach($projects as $project): ?>
-                                <option value="<?php echo $project['id'] ?>"><?php echo $project['title']; ?></option>
-                            <?php endforeach; ?>
+                        <div class="form-row">
 
-                        </select>
-                    </div>
+                            <label for="project-selection">Project:</label>
+                            <select class="selection-dropdown" id="project-selection" disabled>
+                               <option value="" selected><?php echo $ids[$_POST['submit-project']]; ?></option>
+                            </select>
 
-                    <hr class="form-divide">
+                            <input type="hidden" name="project-id" value="<?php echo $_POST['submit-project']; ?>">
+                        </div>
 
-                    <div class="form-row">
+                        <hr class="form-divide">
 
-                        <label>
-                            <span>Task name: </span>
-                            <input name="task-name" type="text" required>
-                        </label>
+                        <div class="form-row">
 
-                    </div>
+                            <label>
+                                <span>Task name: </span>
+                                <input name="task-name" type="text" required>
+                            </label>
 
-                    <div class="form-row">
-                        <button name="submit" value="new-task" type="submit" class="form-btn btn-submit">
-                            <i class="fa-solid fa-check"></i><span>Add</span>
-                        </button>
-                    </div>
+                        </div>
 
-                    <div class="alert danger hidden" role="alert">Please choose a project and try again</div>
+                        <div class="form-row">
+                            <button name="submit" value="new-task" type="submit" class="form-btn btn-submit">
+                                <i class="fa-solid fa-check"></i><span>Add</span>
+                            </button>
+                        </div>
 
-                </form>
+                        <div class="alert danger hidden" role="alert">Please choose a project and try again</div>
 
-            </section>
+                    </form>
 
-        </div>
+                </section>
 
+            </div>
+
+        <?php endif; ?>
 
     </div>
-
 
 </div>
 

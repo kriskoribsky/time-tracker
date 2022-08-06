@@ -31,9 +31,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
             // checkout time
 
 
-
-
-
             // add task
             case 'new-task':
 
@@ -98,11 +95,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     // Database::query();
 
                 } catch (PDOException $e) {
-                    header('Location: /tasks?m=failed');
+                    header('Location: /sessions?m=failed');
                     exit();
 
                 } catch (AssertionError) {
-                    header('Location: /tasks?m=bad-data');
+                    header('Location: /sessions?m=wrong-format');
                     exit();
                 }
 

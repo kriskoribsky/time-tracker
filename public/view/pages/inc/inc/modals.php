@@ -199,9 +199,9 @@
 
 <?php endif; ?>
 
-<?php if (isset($_GET['m']) && $_GET['m'] === 'ok'): ?>
-
 <!-- modal failed db insert (wrong data format) -->
+<?php if (isset($_GET['m']) && $_GET['m'] === 'wrong-format'): ?>
+
 <div class="modal modal-show" id="" style="display: block;">
     <div class="modal-dialog" role="document">
         <form action="<?php echo Sanitize::sanitize_html(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>" method="POST" class="modal-content form">
