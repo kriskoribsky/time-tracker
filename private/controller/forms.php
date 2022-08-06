@@ -1,9 +1,5 @@
 <?php
 
-// Helper\Debug::log($_SERVER, true);
-// Helper\Debug::log($_REQUEST);
-
-// catch DB errors
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
 
@@ -29,6 +25,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             // checkout time
+            
 
 
             // add task
@@ -50,18 +47,15 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     }
                 }
 
-                header('Location: /tasks?m=ok&o=task');
+                header('Location: /tasks?m=ok&o=session');
                 exit();
 
 
             // add session
             case 'new-session':
 
-                Helper\Debug::log($_POST);
-
                 try {
                     // input validation
-
                     // start and end times will be further validated
                     assert(preg_match('/^\d\d?:\d\d$/', $_POST['start-time']) === 1);
                     assert(preg_match('/^\d\d?:\d\d$/', $_POST['end-time']) === 1);
@@ -76,23 +70,40 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     assert($start !== false);
                     assert($end !== false);
 
-                    if (isset($_POST['next-day']) && $_POST['next-day'] == true) {
+                    if (isset($_POST['next-day']) && $_POST['next-day'] == 'true') {
                         $end = $end->modify('+1 day');
+                    } elseif (!empty($_POST['next-day']) && $_POST['next-day'] != 'true') {
+                        throw new AssertionError('value of next-day input must be true');
                     }
 
-                    // $gross_code_hours = Format::subtract_hours_minutes($start, $end);
                     $gross_code_seconds = Format::subtract_seconds($start, $end);
                     $gross_code_formatted = Format::format_seconds($gross_code_seconds);
+                    $gross_checkout_time = $gross_code_seconds;
 
                     $ratio = (float) $_POST['net-working-time'] / 100;
 
                     $net_code_seconds = round($gross_code_seconds * $ratio);
                     $net_code_formatted = Format::format_seconds((int) $net_code_seconds);
+                    $net_checkout_time = $net_code_seconds;
 
+                    $sql = 'INSERT INTO sessions(task_id, start, end, next_day, gross_time, gross_formatted_time, gross_checkout_time, net_time_ratio, net_time, net_formatted_time, net_checkout_time, note) VALUES (:task_id, :start, :end, :next_day, :gross_time, :gross_formatted_time, :gross_checkout_time, :net_time_ratio, :net_time, :net_formatted_time, :net_checkout_time, :note)';
 
-                    $sql = 'INSERT INTO () ';
+                    $placeholder_values = [
+                        'task_id' => $_POST['task-id'],
+                        'start' => $start->format('G:i'),
+                        'end' => $end->format('G:i'),
+                        'next_day' => isset($_POST['next-day']) && $_POST['next-day'] == 'true' ? 1 : 0,
+                        'gross_time' => $gross_code_seconds,
+                        'gross_formatted_time' => $gross_code_formatted,
+                        'gross_checkout_time' => $gross_checkout_time,
+                        'net_time_ratio' => $ratio,
+                        'net_time' => $net_code_seconds,
+                        'net_formatted_time' => $net_code_formatted,
+                        'net_checkout_time' => $net_checkout_time,
+                        'note' => $_POST['note'] ?? NULL
+                    ];
 
-                    // Database::query();
+                    Database::query($sql, $placeholder_values);
 
                 } catch (PDOException $e) {
                     header('Location: /sessions?m=failed');
@@ -103,7 +114,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     exit();
                 }
 
-                header('Location: /sessions?m=ok&o=task');
+                header('Location: /sessions?m=ok&o=session');
                 exit();
             }
 
