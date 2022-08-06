@@ -219,7 +219,7 @@
             <div class="modal-body">
 
                 <div class="alert danger" role="alert">
-                    Data you've inputted are in wrong format, please try again.
+                    The data you entered has an incorrect format.
                 </div>
 
             </div>

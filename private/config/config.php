@@ -25,3 +25,8 @@ const DB_PASS = 'D)2M*pDyuV0IAKqI';
 // ==========================================================================
 const EXPORT_DIR = '';
 
+// App functionality
+// ==========================================================================
+const DEFAULT_SALARY = null;
+const DEFAULT_TIME_AMOUNT = 'net';
+
