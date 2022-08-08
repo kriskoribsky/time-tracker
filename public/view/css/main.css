@@ -21,6 +21,8 @@
     --warning-yellow-bg: #fff3cd;
     --warning-color: #f6c23e;
 
+    --switch-bg-grey-color: #ccc;
+
     /* widths */
     --sidebar-width: 224px;
 }
@@ -709,4 +711,78 @@ input:disabled {
 
 .browse-tasks.project-select {
     height: auto;
+}
+
+.switch-label {
+    display: flex;
+    align-items: center;
+}
+
+.switch-label .switch {
+    margin-left: 0.4em;
+}
+
+/* slider switch styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 3.2em;
+    height: 1.9em;
+}
+
+.switch:hover {
+    cursor: pointer;
+}
+
+/* hide default checkbox input */
+.switch-checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+}
+
+.slider {
+    display: inline-block;
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-color: var(--switch-bg-grey-color);
+    border-radius: 0.8em;
+
+    transition: background-color 200ms ease;
+}
+
+.slider::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+
+    height: 1.4em;
+    width: 1.4em;
+
+    /* center vetically */
+    top: 50%;
+    transform: translateY(-50%);
+
+    left: 0.2em;
+    /* parent 0width & height = 3.4em */
+    /* 1.4em * 2 + left(0.2em) & right (0.2em) = 3.4em*/
+
+    transition: transform 200ms ease;
+}
+
+.switch-checkbox:checked + .slider::before {
+    /* move slider's full width (1.4em) */
+    transform: translate(1.4em, -50%);
+}
+
+.switch-checkbox:checked + .slider {
+    background-color: var(--primary-color);
 }

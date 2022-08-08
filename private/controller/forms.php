@@ -21,7 +21,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                 header('Location: /dashboard');
                 exit();
-
                 break;
 
             // checkout time
@@ -49,7 +48,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                 header('Location: /tasks?m=ok&o=session');
                 exit();
-
+                break;
 
             // add session
             case 'new-session':
@@ -116,6 +115,39 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                 header('Location: /sessions?m=ok&o=session');
                 exit();
+                break;
+
+            default:
+                header('Location: /error');
+                exit();
+
+            // changes in configuration
+            case 'configuration-change':
+                try {
+                    // salary config option
+                    if (isset($_POST['salary'])) {
+                        Database::query('UPDATE app_config SET value=:amount WHERE option_name=:config_option', [
+                            'config_option' => 'salary_rate',
+                            'amount' => (float) round($_POST['salary'], 1)
+                        ]);
+                    }
+
+                    // show net coding-time config option
+                    $show_net = isset($_POST['show-net-format']) ? 1 : 0; 
+
+                    Database::query('UPDATE app_config SET value=:amount WHERE option_name=:config_option', [
+                        'config_option' => 'display_net_time',
+                        'amount' => $show_net
+                    ]);
+    
+                } catch (PDOException $e) {
+                    header('Location: /configuration?m=failed');
+                }
+
+                header('Location: /configuration?m=ok&o=config options');
+                exit();
+ 
+                break;
             }
 
         break;
