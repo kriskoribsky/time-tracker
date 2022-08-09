@@ -1,6 +1,6 @@
 <?php 
 // query DB for current configuration settings
-$config_query = Sanitize::sanitize_html_query(Database::query('SELECT option_name, value from app_config'));
+$config_query = Sanitize::sanitize_html_query(Database::query('SELECT option_name, value FROM app_config'));
 
 foreach ($config_query as $query) {
     $config[$query['option_name']] = $query['value'];
