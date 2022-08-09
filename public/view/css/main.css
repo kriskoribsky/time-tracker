@@ -1,5 +1,7 @@
 :root {
+    --primary-default-color:#4e73df;
     --primary-color: #4e73df;
+    --primary-gradient-secondary-color: #224abe;
     --primary-color-rgb: rgb(78, 115, 223);
     --primary-color-input-rgba: rgb(78, 115, 223, 0.1);
     --secondary-color: #858796;
@@ -77,7 +79,7 @@ p {
 
 .bg-gradient-primary {
     background-color: var(--primary-color);
-    background-image: linear-gradient(180deg, var(--primary-color) 10%,#224abe 100%);
+    background-image: linear-gradient(180deg, var(--primary-color) 10%, var(--primary-gradient-secondary-color) 100%);
     background-size: cover;
 }
 
@@ -347,6 +349,7 @@ main {
 }
 
 .form-btn {
+    display: inline-block;
     border-radius: 6px;
     overflow: hidden;
     padding: 0;
@@ -785,4 +788,213 @@ input:disabled {
 
 .switch-checkbox:checked + .slider {
     background-color: var(--primary-color);
+}
+
+/* project groups landingpage styles */
+.no-background {
+    background-color: white;
+}
+
+.project-groups-container {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+/* fading out on sides effect (parent element must be relative positioned!)*/
+.fade::before {
+    position: absolute;
+    display: block;
+    content: '';
+    top: 0;
+    left: 0;
+
+    /* 30% of parent width */
+    width: 20%;
+    height: 100%;
+
+    background: linear-gradient(to left, rgba(255, 255, 255, 0), 30%, var(--bg-color));
+     /* background: linear-gradient(to right, red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%); */
+
+    /* background: -webkit-linear-gradient(-180deg, var(--bg-color) 0, rgba(0,0,0,0) 100%);
+    background: -moz-linear-gradient(270deg, var(--bg-color) 0, rgba(0,0,0,0) 100%);
+    background: linear-gradient(270deg, var(--bg-color) 0, rgba(0,0,0,0) 100%); */
+
+}
+
+.fade::after {
+    position: absolute;
+    display: block;
+    content: '';
+    top: 0;
+    right: 0;
+
+    /* 40% of parent width */
+    width: 20%;
+    height: 100%;
+
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), 30%, var(--bg-color));
+     /* background: linear-gradient(to right, red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%); */
+
+    /* background: -webkit-linear-gradient(-180deg, var(--bg-color) 0, rgba(0,0,0,0) 100%);
+    background: -moz-linear-gradient(270deg, var(--bg-color) 0, rgba(0,0,0,0) 100%);
+    background: linear-gradient(270deg, var(--bg-color) 0, rgba(0,0,0,0) 100%); */
+}
+
+
+.project-groups-container header {
+    color: var(--text-light);
+    background-color: var(--primary-default-color);
+    text-align: center;
+
+    padding: 0.8em;
+}
+
+.project-groups-container .main-logo {
+    margin: 0;
+}
+
+.project-groups {
+    width: 75%;
+    height: 100%;
+
+    margin: auto;
+    text-align: center;
+}
+
+.project-groups h2 {
+    margin: auto;
+    padding: 2em 0 1em 0;
+    width: 60%;
+    font-size: 1em;
+    font-weight: 500;
+
+    background-color: var(--section-heading-bg);
+    border-bottom: 1px solid #e3e6f0;
+    color: var(--primary-color);
+}
+
+.carousel {
+    margin: auto;;
+    margin-top: 2em;
+    width: 65%;
+    border: 1px solid red;
+    position: relative;
+}
+
+.carousel-viewport {
+    position: relative;
+    height: 680px;
+}
+
+.carousel-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-card {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    border-radius: 1.6em;
+
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.carousel-next-btn, .carousel-previous-btn {
+    position: absolute;
+    /* half of cards height */
+    top: calc(680px / 2);
+
+    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-default-color);
+    color: var(--text-light);
+    border-radius: 50%;
+    font-size: 1.4em;
+    line-height: 1;
+    width: 1.8em;
+    height: 1.8em;
+    border: 0;
+    filter: brightness(92%);
+
+    /* visual alignment */
+    padding-top: 0.1em;
+
+}
+
+.carousel-next-btn:hover, .carousel-previous-btn:hover {
+    cursor: pointer;
+    filter: brightness(100%);
+}
+
+.carousel-next-btn {
+    right: 8%;
+    /* padding-right: 0.05em; */
+}
+
+.carousel-previous-btn {
+    left: 8%;
+    /* padding-left: 0.05em; */
+}
+
+.carousel-card-dots {
+    position: absolute;
+    bottom: -30px;
+
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    list-style: none;
+    text-align: center;
+    line-height: 1;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 8px;
+    background: #333;
+    border-radius: 50%;
+    filter: alpha(opacity=25);
+    opacity: 0.25;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.project-groups-container footer {
+    margin: 0;
+    font-size: 0.7em;
 }

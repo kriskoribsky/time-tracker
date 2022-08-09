@@ -22,6 +22,9 @@ class Router {
 
         switch($path) {
             case '/':
+                require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'project_groups.php');
+                break;
+
             case '/dashboard':
                 require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'dashboard.php');
                 break;

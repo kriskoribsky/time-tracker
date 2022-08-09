@@ -39,4 +39,31 @@ class Format {
         return $hours_minutes[0] . ' hours ' . $hours_minutes[1] . ' minutes';
     }
 
+    // dynamically generates sidebar nav secondary gradient color based on primary
+    public static function generate_secondary_gradient_clr(string $primary_clr): string {
+
+        $primary_clr = ltrim($primary_clr, '#');
+
+        $rgb = array_map(fn($substr) => hexdec(str_pad($substr, 2, $substr)), str_split($primary_clr, strlen($primary_clr) > 3 ? 2 : 1));
+
+        // create darker tone (if is the result would be negative it adds instead of subtraction => lighter tone)
+        // rgb offsets [r, g, b]
+        $offsets = [-44, -41, -33];
+        $negative = 1;
+
+        for ($i = 0; $i < count($rgb); $i++) {
+            if ($rgb[$i] + $offsets[$i] < 0) {
+                $negative = -1;
+                break;
+            }
+        }
+
+        $rgb[0] += $negative * $offsets[0];
+        $rgb[1] += $negative * $offsets[1];
+        $rgb[2] += $negative * $offsets[2];
+
+
+        return '#' . join('', array_map(fn($subpart) => dechex($subpart), $rgb));
+    }
+
 }

@@ -29,4 +29,5 @@ const EXPORT_DIR = '';
 // ==========================================================================
 const DEFAULT_SALARY = null;
 const DEFAULT_TIME_AMOUNT = 'net';
-
+// default color of sidebar nav for every project group
+const DEFAULT_PRIMARY_CLR = '#4e73df';

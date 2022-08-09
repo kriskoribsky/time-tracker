@@ -5,7 +5,6 @@
         'modal': 'modal-show'
     }
 
-
     // itarate over all page modals and add close event listeners
     Array.from(document.getElementsByClassName('modal')).forEach(modal => {
 
@@ -50,4 +49,59 @@
             })
         }
     })
+
+    // carousel
+    const targetClass = 'carousel';
+    const viewportClass = 'carousel-viewport';
+    const sliderClass = 'carousel-slider'
+    const cardsClass = 'carousel-card';
+    // relative gap between cards (in %)
+    const relativedGap = 5;
+    
+    // dynamicaly generated classnames
+    let activeClass = 'is-selected';
+
+    // get all carousels on page
+    const carousels = document.getElementsByClassName(targetClass);
+
+    Array.from(carousels).forEach((carousel) => {
+        // carousel utility elements
+        const viewport = carousel.getElementsByClassName(viewportClass)[0];
+        const slider = carousel.getElementsByClassName(sliderClass)[0];
+
+        // get all carousel child cards
+        const cards = carousel.getElementsByClassName(cardsClass);
+
+        // carousel-specific parameters
+        let n = cards.length;
+        const parentWidth = carousel.offsetWidth;
+        const cardWidth = cards[0].offsetWidth;
+        const cardGap = cardWidth * (relativedGap / 100)
+
+        // const relativeCardShift = parentWidth / (cardWidth + cardGap);
+        let i = 0;
+
+        // card default absolute positions
+        Array.from(cards).forEach((card) => {
+            card.style.position = 'absolute';
+            card.style.left = (i * (cardWidth + cardGap))  + 'px';
+            i++;
+        })
+        
+        const currentPos = 0;
+
+        // center slider so that first card is in the center
+        slider.style.transform = "translateX(" + (parentWidth / 2 - cardWidth / 2) + "px)";
+
+    })
+
+
+
+
+
+
+
+
+    // AJAX call to php to query DB for project group primary color value, then change :root primary color & gradient color custom properties
+    
 }
