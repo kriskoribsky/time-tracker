@@ -21,7 +21,7 @@ foreach ($config_query as $query) {
 
         <section class="data-section shadow configuration-options">
 
-            <h2>Configure default app functionality</h2>
+            <h2>Default app functionality</h2>
 
             <form class="form" action="/forms" method="POST">
 
