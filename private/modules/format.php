@@ -4,6 +4,7 @@ class Format {
     // text colors for color manipulation & calculating constrast color
     const TEXT_LIGHT = '#fff';
     const TEXT_DARK = '#212529';
+    const OUTPUT_DATE_FORMAT = 'd-m-Y';
 
 
 
@@ -13,6 +14,10 @@ class Format {
         $datetime_object = DateTime::createFromFormat($format, $time);
 
         return $datetime_object && $datetime_object->format($format) === $time ? $datetime_object : false;
+    }
+
+    public static function database_time(string $time, string $format = self::OUTPUT_DATE_FORMAT): string {
+        
     }
 
     // returns hours:minutes
