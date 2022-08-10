@@ -4,6 +4,28 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
 
         switch ($_POST['submit']) {
+            // create project-group
+            case 'new-group':
+                try {
+                    Database::query('INSERT INTO project_groups(title, primary_color) VALUES(:title, :color)', [
+                        'title' => $_POST['group-name'],
+                        'color' => $_POST['group-color']
+                        ]);
+
+                } catch (PDOException $e) {
+                    if (in_array($e->getCode(), Database::MYSQL_DUPLICATE_CODES)) {
+                        header('Location: /?m=duplicate&o=project group');
+                        exit();
+                    } else {
+                        header('Location: /?m=failed');
+                        exit();
+                    }
+                }
+
+                header('Location: /');
+                exit();
+                break;
+
             // create project
             case 'new-project':
                 
