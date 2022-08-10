@@ -1,8 +1,13 @@
 <?php
 class Format {
 
-    private function __construct() {}
+    // text colors for color manipulation & calculating constrast color
+    const TEXT_LIGHT = '#fff';
+    const TEXT_DARK = '#212529';
 
+
+
+    private function __construct() {}
 
     public static function valid_time(string $format, string $time): DateTime|false {
         $datetime_object = DateTime::createFromFormat($format, $time);
@@ -42,9 +47,7 @@ class Format {
     // dynamically generates sidebar nav secondary gradient color based on primary
     public static function generate_secondary_gradient_clr(string $primary_clr): string {
 
-        $primary_clr = ltrim($primary_clr, '#');
-
-        $rgb = array_map(fn($substr) => hexdec(str_pad($substr, 2, $substr)), str_split($primary_clr, strlen($primary_clr) > 3 ? 2 : 1));
+        $rgb = self::hex_to_rgb($primary_clr);
 
         // create darker tone (if is the result would be negative it adds instead of subtraction => lighter tone)
         // rgb offsets [r, g, b]
@@ -63,6 +66,21 @@ class Format {
         $rgb[2] += $negative * $offsets[2];
 
 
+        return self::rgb_to_hex($rgb);
+    }
+
+    public static function get_contrast_clr(string $background_clr): string {
+        $rgb = self::hex_to_rgb($background_clr);
+
+        return array_sum($rgb) > 382 ? self::TEXT_DARK : self::TEXT_LIGHT;
+    }
+
+    public static function hex_to_rgb(string $hex): array {
+        $hex = ltrim($hex, '#');
+        return array_map(fn($substr) => hexdec(str_pad($substr, 2, $substr)), str_split($hex, strlen($hex) > 3 ? 2 : 1));
+    }
+
+    public static function rgb_to_hex(array $rgb): string {
         return '#' . join('', array_map(fn($subpart) => dechex($subpart), $rgb));
     }
 
