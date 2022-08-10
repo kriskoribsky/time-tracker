@@ -1,3 +1,55 @@
+<!-- modal create project group -->
+<div class="modal" id="create-group-modal" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <form action="/forms" method="POST" class="modal-content form">
+
+            <div class="modal-header">
+                
+                <h5 class="modal-title">Create new project group</h5>
+
+                <a type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+
+            </div>
+
+            <div class="modal-body">
+
+                <!-- <p>Project groups work as a collection of all your projects. All statistics and data about working-time displayed on site belong to the group you create here & select.</p> -->
+                <p class="modal-comment">All statistics and data about working-time displayed later will belong to the group you create here.</p>
+
+                <p>
+                    <label>
+                        <span>Group name: </span>
+                        <input name="group-name" type="text" autofocus required>
+                    </label>
+                </p>
+
+                <p class="color-input">
+                    <label>
+                        <span>Group color: </span>
+                        <input class="form-color-pick" type="color" name="group-color" value="#4e73df" required>
+                    </label>
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <a class="form-btn modal-btn btn-secondary" data-dismiss="modal">
+                    <span>Close</span>
+                </a>
+
+                <button class="form-btn modal-btn  btn-submit" type="submit" name="submit" value="new-group">
+                    <span>Create</span>
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
 <!-- modal add project -->
 <div class="modal" id="create-project-modal" style="display: none;">
     <div class="modal-dialog" role="document">
@@ -90,7 +142,7 @@
 
             <div class="modal-header">
                 
-                <h5 class="modal-title">Duplicate name</h5>
+                <h5 class="modal-title">Duplicate</h5>
 
                 <a type="button" class="modal-close-btn" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
