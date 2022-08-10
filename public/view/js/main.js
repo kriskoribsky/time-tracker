@@ -1,4 +1,5 @@
-// main namespace
+// Main namespace
+// ==========================================================================
 {
     // list of components and their  classes in css
     const components = {
@@ -50,11 +51,64 @@
         }
     })
 
-    // carousel
+    // Carousel
+    // ==========================================================================
+    // functions
+    function carouselShift(element, slider, sliderShift, prevBtn, nextBtn, dots, cards) {
+        // get current shift value
+        const currentShift = parseFloat(slider.style.transform.match(/-?[0-9\.]+/g)[0]);
+
+        // get currently selected card
+        const oldCard = slider.getElementsByClassName(activeClass)[0];
+        const oldCardIndex = [...cards].indexOf(oldCard);
+
+        if (element === prevBtn) {
+            // slider.style.transform = "translateX(" + (currentShift + sliderShift) + "%)";
+            var newCardIndex = oldCardIndex - 1;
+
+        } else if (element === nextBtn) {
+            // slider.style.transform = "translateX(" + (currentShift - sliderShift) + "%)";
+            var newCardIndex = oldCardIndex + 1;
+
+        } else {
+            var newCardIndex = [...dots].indexOf(element);
+        }
+
+        const newCard = cards[newCardIndex];
+
+        // shift slider
+        const shift = (oldCardIndex - newCardIndex) * sliderShift;
+
+        slider.style.transform = "translateX(" + (currentShift + shift) + "%)";
+
+        oldCard.classList.remove(activeClass);
+        newCard.classList.add(activeClass);
+
+        dots[oldCardIndex].classList.remove(activeClass);
+        dots[newCardIndex].classList.add(activeClass);
+
+        if (!newCard.nextElementSibling) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'flex';
+        }
+
+        if (!newCard.previousElementSibling) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'flex';
+        }
+    }
+
+    // initialize all document carousels
     const targetClass = 'carousel';
     const viewportClass = 'carousel-viewport';
     const sliderClass = 'carousel-slider'
     const cardsClass = 'carousel-card';
+    const nextBtnClass = 'carousel-next-btn';
+    const prevBtnClass = 'carousel-previous-btn';
+    const dotsClass = 'dot';
+    const animationClass = 'carousel-animation';
     // relative gap between cards (in %)
     const relativedGap = 5;
     
@@ -68,38 +122,59 @@
         // carousel utility elements
         const viewport = carousel.getElementsByClassName(viewportClass)[0];
         const slider = carousel.getElementsByClassName(sliderClass)[0];
+        const nextBtn = carousel.getElementsByClassName(nextBtnClass)[0];
+        const prevBtn = carousel.getElementsByClassName(prevBtnClass)[0];
+        const dots = carousel.getElementsByClassName(dotsClass);
 
         // get all carousel child cards
         const cards = carousel.getElementsByClassName(cardsClass);
 
-        // carousel-specific parameters
-        let n = cards.length;
-        const parentWidth = carousel.offsetWidth;
-        const cardWidth = cards[0].offsetWidth;
-        const cardGap = cardWidth * (relativedGap / 100)
+        // hide navigation buttons at start
+        nextBtn.style.display = 'none';
+        prevBtn.style.display = 'none';
 
-        // const relativeCardShift = parentWidth / (cardWidth + cardGap);
-        let i = 0;
+        if (cards) {
+            // carousel-specific parameters
+            const parentWidth = carousel.offsetWidth;
+            const cardWidth = cards[0].offsetWidth;
+            const cardGap = cardWidth * (relativedGap / 100)
 
-        // card default absolute positions
-        Array.from(cards).forEach((card) => {
-            card.style.position = 'absolute';
-            card.style.left = (i * (cardWidth + cardGap))  + 'px';
-            i++;
-        })
-        
-        const currentPos = 0;
+            // relative card shift in %
+            const CardShift = (cardWidth + cardGap) / parentWidth * 100;
+            let i = 0;
 
-        // center slider so that first card is in the center
-        slider.style.transform = "translateX(" + (parentWidth / 2 - cardWidth / 2) + "px)";
+            // card default absolute positions
+            Array.from(cards).forEach((card) => {
+                card.style.position = 'absolute';
+                card.style.left = i * CardShift + '%';
+                i++;
+            })
+            
+            // slider shift in %
+            const sliderShift = (cardWidth + cardGap) / parentWidth * 100;
+            const initialShift = (parentWidth / 2 - cardWidth / 2) / parentWidth * 100;
+            slider.style.transform = "translateX(" + initialShift + "%)";
 
+            // initial control elements setup
+            setTimeout(() => {
+                slider.classList.add(animationClass);
+            }, 1);
+
+            cards[0].classList.add(activeClass);
+            dots[0].classList.add(activeClass);
+            if (cards.length > 1) {
+                nextBtn.style.display = 'flex';
+            }
+
+            // bind shift actions to control buttons & dots
+            [prevBtn, nextBtn, ...dots].forEach(element => {
+                element.addEventListener('click', event => {
+                    event.preventDefault();
+                    carouselShift(element, slider, sliderShift, prevBtn, nextBtn, dots, cards);
+                })
+            })
+        }
     })
-
-
-
-
-
-
 
 
     // AJAX call to php to query DB for project group primary color value, then change :root primary color & gradient color custom properties
