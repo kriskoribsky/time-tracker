@@ -920,6 +920,7 @@ input:disabled {
     height: 100%;
     width: 50%;
     border-radius: 1.6em;
+    border: none;
 
     /* background color & text color will be specified dynamically */
     background-color: var(--primary-color);

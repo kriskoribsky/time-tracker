@@ -1,104 +1,59 @@
 <?php
-// Object–relational mapping (ORM)
-// class DatabaseObject {
-//     public int $id;
-//     public string $created_at;
-//     public string $title;
-//     public int $parent_id;
-//     public array $child_objects;
-
-//     public function __construct(int $id, string $created_at, string|null $title = null, int|null $parent_id = null, array|null $child_objects = null) {
-//         $this->id = $id;
-//         $this->created_at = $created_at;
-//         $this->title = $title;
-//         $this->parent_id = $parent_id;
-//         $this->child_objects = $child_objects;
-//     }
-// }
-
-// class Group extends DatabaseObject {
-//     public string $primary_color;
-//     public string $primary_gradient_second_color;
-//     public string $text_color;
-
-//     public function __construct(int $id, string $created_at, string $title, string $primary_color, array $projects = null) {
-//         parent::__construct($id, $created_at, $title, null, $projects);
-
-//         $this->primary_color = $primary_color;
-//         $this->primary_gradient_second_color = Format::generate_secondary_gradient_clr($this->primary_color);
-//         $this->text_color = Format::get_contrast_clr($this->primary_color);
-//     }
-// }
-
-// class Project extends DatabaseObject{
-
-//     public function __construct(int $id, string $created_at, string $title, int $group_id, array $tasks) {
-//         parent::__construct($id, $created_at, $title, $group_id, $tasks);
-//     }
-// }
-
-// class Task extends DatabaseObject{
-
-//     public function __construct(string $id, string $created_at, string $title, int $project_id, array $sessions) {
-//         parent::__construct($id, $created_at, $title, $project_id, $sessions);
-//     }
-// }
-
-// class Session extends DatabaseObject{
-//     public int $start;
-//     public int $end;
-//     public int $next_day;
-//     public int $gross_time;
-//     public string $gross_formatted_time;
-//     public int $gross_checkout_time;
-//     public float $net_time_ratio;
-//     public int $net_time;
-//     public string $net_formatted_time;
-//     public int $net_checkout_time;
-//     public string $note;
-
-//     public function __construct(string $id, string $created_at, int $task_id, int $start, int $end, int $next_day, int $gross_time, string $gross_formatted_time, int $gross_checkout_time, float $net_time_ratio, int $net_time, string $net_formatted_time, int $net_checkout_time, string $note) {
-//         parent::__construct($id, $created_at, null, $task_id, null);
-
-//         $this->start = $start;
-//         $this->end = $end;
-//         $this->next_day = $next_day;
-//         $this->gross_time = $gross_time;
-//         $this->gross_formatted_time = $gross_formatted_time;
-//         $this->gross_checkout_time = $gross_checkout_time;
-//         $this->net_time_ratio = $net_time_ratio;
-//         $this->net_time = $net_time;
-//         $this->net_formatted_time = $net_formatted_time;
-//         $this->net_checkout_time = $net_checkout_time;
-//         $this->note = $note;
-//     }
-// }
-
-class Group {
-    public string $primary_gradient_second_color;
-    public string $text_color;
-
-    public function __construct(object $fetchObjGroup) {
-        foreach ($fetchObjGroup as $key => $value) {
-            $this->$key = $value;
-        }
-
-        $this->primary_gradient_second_color = Format::generate_secondary_gradient_clr($this->primary_color);
-        $this->text_color = Format::get_contrast_clr($this->primary_color);
-    }
-}
-
 // query project groups -> their projects & tasks & last session edit date
 $queried_groups = Database::query('SELECT * from project_groups', null, PDO::FETCH_OBJ);
+$queried_projects = Database::query('SELECT * from projects', null, PDO::FETCH_OBJ);
+$queried_tasks = Database::query('SELECT * from tasks', null, PDO::FETCH_OBJ);
+$queried_sessions = Database::query('SELECT * from sessions', null, PDO::FETCH_OBJ);
+
 $groups = [];
 
-foreach($queried_groups as $group) {
-    $groups[] = new Group($group);
+// inefficient way (am in time trouble, had to do the first solution i could think of)
+foreach ($queried_groups as $g) {
+    $projects = [];
+
+    foreach ($queried_projects as $p) {
+        $tasks = [];
+
+        foreach ($queried_tasks as $t) {
+            $sessions = [];
+
+            foreach ($queried_sessions as $s) {
+                if ($s->task_id === $t->id) {
+                    $sessions[] = new Session($s);
+                }
+            }
+            $task = new Task($t, $sessions);
+
+            if ($task->project_id === $p->id) {
+                $tasks[] = $task;
+            }
+        }
+        $project = new Project($p, $tasks);
+
+        if ($project->project_group_id === $g->id) {
+            $projects[] = $project;
+        }
+    }
+    $groups[] = new Group($g, $projects);
+}
+
+if (isset($_POST['group_id'])) {
+    // set object to session in a serialized format
+    foreach ($groups as $group) {
+        if ($group->id == $_POST['group_id']) {
+            $_SESSION['group_id'] = $group->id;
+            $_SESSION['group_title'] = $group->title;
+            $_SESSION['expire'] = time() + 24 * 60 * 60; // set session for one day
+
+            header('Location: /dashboard');
+            exit;
+        }
+    }
 }
 ?>
 
 <?php require_once 'inc/inc/head.php'; ?>
-    
+
 <body class="no-background">
 
     <div class="project-groups-container shadow">
@@ -107,7 +62,7 @@ foreach($queried_groups as $group) {
 
         <header>
             <h1 class="main-logo">
-                <a href="/">
+                <a href="/project-groups">
                     <i class="fa-solid fa-clock"></i>
                     <span>Time-tracker</span>
                 </a>
@@ -120,64 +75,63 @@ foreach($queried_groups as $group) {
 
                 <h2>
                     <span>Select a project group</span>
-                     <a class="heading-icon" data-toggle="modal" data-target="#create-group-modal" href="#" title="Create new project group"><i class="fa-solid fa-folder-plus"></i></a>
-                </h2> 
+                    <a class="heading-icon" data-toggle="modal" data-target="#create-group-modal" href="#" title="Create new project group"><i class="fa-solid fa-folder-plus"></i></a>
+                </h2>
 
                 <div class="carousel">
 
                     <div class="carousel-viewport fade">
 
                         <div class="carousel-slider">
+                            <form action="<?php echo Sanitize::sanitize_html(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>" method="POST">
 
-                            <?php foreach($groups as $group): ?>
-                                <div class="carousel-card" title="Click to select">
-                                    <div class="card-header">
-                                        <h3><?php echo $group->title; ?></h3>
+                                <?php foreach ($groups as $group) : ?>
+                                    <button type="submit" class="carousel-card" title="Click to select" name="group_id" value="<?php echo $group->id; ?>" style="color: <?php echo $group->text_color; ?>;
+                                            background-image: linear-gradient(180deg, <?php echo $group->primary_color; ?> 10%, <?php echo $group->primary_gradient_second_color; ?> 100%);">
+                                        <div class="card-header">
+                                            <h3><?php echo $group->title; ?></h3>
 
-                                        <p title="Hexadecimal color value"><code><?php echo $group->primary_color; ?></code></p>
-                                    </div>
-
-                                    <div class="card-body">
-
-                                        <div class="card-projects" title="Projects in this project group">
-                                            <h4>Projects</h4>
-                                            <ul class="group-projects-dialog">
-
-                                                <li>Pevasoft</li>
-                                                <li>Elcop</li>
-                                                <li>Elcop2</li>
-                                                <li>Jobin</li>
-                                                <li>Yeet-sass</li>
-                                            </ul>
+                                            <p title="Hexadecimal color value"><code><?php echo $group->primary_color; ?></code></p>
                                         </div>
 
-                                        <div class="card-tasks" title="Tasks from projects above">
+                                        <div class="card-body">
+
+                                            <div class="card-projects" title="Projects in this project group">
+                                                <h4>Projects</h4>
+                                                <ul class="group-projects-dialog">
+
+                                                    <?php foreach ($group->subComponents as $project) : ?>
+                                                        <li><?php echo $project->title; ?></li>
+                                                    <?php endforeach; ?>
+
+                                                </ul>
+                                            </div>
+
+                                            <div class="card-tasks" title="Tasks from projects above">
                                                 <h4>Tasks</h4>
                                                 <ul class="group-projects-dialog">
 
-                                                    <li>Pricelist</li>
-                                                    <li>Searcher</li>
-                                                    <li>Grid.scss</li>
-                                                    <li>Spacing.scss</li>
-                                                    <li>Template</li>
-                                                    <li>Error fixing</li>
-                                                    <li>Maintenance</li>
+                                                    <?php foreach ($group->subComponents as $project) : ?>
+                                                        <?php foreach ($project->subComponents as $task) : ?>
+                                                            <li><?php echo $task->title; ?></li>
+                                                        <?php endforeach; ?>
+                                                    <?php endforeach; ?>
 
                                                 </ul>
+                                            </div>
+
                                         </div>
 
-                                    </div>
-
-
-                                    <div class="card-footer">
-                                        <div>
-                                            <p><span>Last activity: </span><i>18:44</i></p>
-                                            <p><span>Created at: </span><i><?php echo $group->date_created; ?></i></p>
+                                        <div class="card-footer">
+                                            <div>
+                                                <p><span>Last activity:</span><i><?php echo $group->last_session_activity(); ?></i></p>
+                                                <p><span>Date created:</span><i><?php echo Format::database_time($group->date_created); ?></i></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                                    </button>
+                                <?php endforeach; ?>
 
+                            </form>
                         </div>
 
                     </div>
@@ -191,9 +145,11 @@ foreach($queried_groups as $group) {
                     </button>
 
                     <ol class="carousel-card-dots">
-                        <li class="dot"></li>
+                        <?php foreach ($groups as $_) : ?>
+                            <li class="dot"></li>
+                        <?php endforeach; ?>
                     </ol>
-                  
+
                 </div>
 
             </div>
@@ -207,5 +163,5 @@ foreach($queried_groups as $group) {
     </div>
 
 </body>
-</html>
 
+</html>
