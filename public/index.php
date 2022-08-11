@@ -21,6 +21,14 @@ foreach ($modules as $module) {
     require_once Helper\Path::build_path(PRIVATE_PATH, 'modules', $module . '.php');
 }
 
+// Object–relational mapping (ORM)
+// ==========================================================================
+require_once Helper\Path::build_path(PRIVATE_PATH, 'controller', 'db_object_mapping.php');
+
+// Start session
+// ==========================================================================
+session_start();
+
 // Page routing
 // ==========================================================================
 require_once(Helper\Path::build_path(PRIVATE_PATH, 'modules', 'router.php'));

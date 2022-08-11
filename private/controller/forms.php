@@ -30,7 +30,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'new-project':
                 
                 try {
-                    Database::query('INSERT INTO projects(title) VALUES(:title)', ['title' => $_POST['project-name']]);
+                    // retrieve group id from the current session
+                    $id = $_SESSION['group_id'];
+
+                    Database::query('INSERT INTO projects(project_group_id, title) VALUES(:group_id, :title)', [
+                        'group_id' => $id,
+                        'title' => $_POST['project-name']
+                        ]);
                 } catch (PDOException $e) {
                     if (in_array($e->getCode(), Database::MYSQL_DUPLICATE_CODES)) {
                         header('Location: /dashboard?m=duplicate&o=project');

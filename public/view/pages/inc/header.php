@@ -9,7 +9,7 @@
         <nav class="side-nav bg-gradient-primary">
 
             <h1 class="main-logo">
-                <a href="/">
+                <a href="/project-groups">
                     <i class="fa-solid fa-clock"></i>
                     <span>Time-tracker</span>
                 </a>

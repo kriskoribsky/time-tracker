@@ -4,7 +4,7 @@ class Format {
     // text colors for color manipulation & calculating constrast color
     const TEXT_LIGHT = '#fff';
     const TEXT_DARK = '#212529';
-    const OUTPUT_DATE_FORMAT = 'd-m-Y';
+    const OUTPUT_DATE_FORMAT = 'd.m.Y';
 
 
 
@@ -17,7 +17,21 @@ class Format {
     }
 
     public static function database_time(string $time, string $format = self::OUTPUT_DATE_FORMAT): string {
-        
+        $datetime = new DateTime($time);
+
+        return $datetime->format($format);
+    }
+
+    // returns last activty -> 'H:i' if on the same day else 'd-m-Y'
+    public static function last_activity(string $time, string $format = self::OUTPUT_DATE_FORMAT): string {
+        $datetime = new DateTime($time);
+        $now = new DateTime();
+
+        if ($datetime->format($format) !== $now->format($format)) {
+            return $datetime->format($format);
+        } else {
+            return $datetime->format('H:i');
+        }
     }
 
     // returns hours:minutes
@@ -77,7 +91,7 @@ class Format {
     public static function get_contrast_clr(string $background_clr): string {
         $rgb = self::hex_to_rgb($background_clr);
 
-        return array_sum($rgb) > 382 ? self::TEXT_DARK : self::TEXT_LIGHT;
+        return array_sum($rgb) > 450 ? self::TEXT_DARK : self::TEXT_LIGHT;
     }
 
     public static function hex_to_rgb(string $hex): array {

@@ -22,9 +22,18 @@ class Router {
 
         switch($path) {
             case '/':
+                // check if there is unexpired session
+                if (isset($_SESSION['expire']) && $_SESSION['expire'] > time()) {
+                    require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'dashboard.php');
+                } else {
+                    // unset expired session
+                    session_unset();
+                    require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'project_groups.php');
+                }
+                break;
+            case '/project-groups':
                 require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'project_groups.php');
                 break;
-
             case '/dashboard':
                 require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'dashboard.php');
                 break;

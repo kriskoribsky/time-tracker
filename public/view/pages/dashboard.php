@@ -1,6 +1,56 @@
 <?php 
-# query database for projects
-$projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM projects ORDER BY date_created DESC"));
+# query DB with group id from this $_SESSION
+$group = Database::query('SELECT * from project_groups WHERE id=:group_id', ['group_id' => $_SESSION['group_id']], PDO::FETCH_OBJ)[0];
+
+// query DB again for latest project, task, session data (because they could be updated)
+$queried_projects = Database::query('SELECT * from projects WHERE project_group_id=:group_id ORDER BY date_created DESC', [
+    'group_id' => $_SESSION['group_id']
+], PDO::FETCH_OBJ);
+
+$queried_tasks = Database::query('SELECT * from tasks', null, PDO::FETCH_OBJ);
+$queried_sessions = Database::query('SELECT * from sessions', null, PDO::FETCH_OBJ);
+
+$projects = [];
+
+foreach ($queried_projects as $p) {
+    $tasks = [];
+    foreach ($queried_tasks as $t) {
+        $sessions = [];
+        foreach($queried_sessions as $s) {
+            if ($s->task_id == $t->id) {
+                $sessions[] = new Session($s);
+            }
+        }
+        if ($t->project_id == $p->id) {
+            $tasks[] = new Task($t, $sessions);
+        }
+    }
+    $projects[] = new Project($p, $tasks);
+}
+
+$group = new Group($group, $projects);
+
+// query DB for current configuration settings
+$config_query = Sanitize::sanitize_html_query(Database::query('SELECT option_name, value FROM app_config'));
+
+foreach ($config_query as $query) {
+    $config[$query['option_name']] = $query['value'];
+}
+
+$display_net = (bool) $config['display_net_time'];
+$wage = $config['salary_rate'];
+
+// overall statistics
+$group_sessions = [];
+
+foreach ($group->get_instances(Session::class) as $session) {
+    $group_sessions[] = $session;
+} 
+
+$group->work_time_7_days = $group->get_latest_sessions_work($group_sessions, $display_net);
+$group->work_time = $group->get_sessions_work($group_sessions, $display_net);
+$group->unpaid_work_time = $group->get_unpaid_work($group_sessions, $display_net);
+$group->salary = $group->get_salary($group->unpaid_work_time, $wage);
 ?>
 
 
@@ -22,18 +72,18 @@ $projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM project
 
                 <section class="data-section project-section shadow width-100">
 
-                    <h2><?php echo $project['title']; ?></h2>
+                    <h2><?php echo $project->title; ?></h2>
 
                     <table class="project-info">
 
                         <tr>
                             <th>Date created:</th>
-                            <td><?php echo implode('.', array_reverse(explode('-', explode(' ', $project['date_created'])[0]))); ?></td>
+                            <td><?php echo Format::database_time($project->date_created); ?></td>
                         </tr>
 
                         <tr>
                             <th>Number of tasks:</th>
-                            <td>5</td>
+                            <td><?php echo count($project->subComponents); ?></td>
                         </tr>
 
                         <tr>
@@ -54,159 +104,6 @@ $projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM project
 
             <?php endforeach; ?>
 
-
-            <!-- <section class="data-section project-section shadow width-100">
-
-                <h2>Elcop</h2>
-
-                <table class="project-info">
-
-                    <tr>
-                        <th>Date created:</th>
-                        <td>30.7.2022</td>
-                    </tr>
-
-                    <tr>
-                        <th>Number of tasks:</th>
-                        <td>5</td>
-                    </tr>
-
-                    <tr>
-                        <th>Unpaid work-time:</th>
-                        <td class="text-green">5 hours 1 minute</td>
-                    </tr>
-
-                    <tr>
-                        <th>Total project work-time:</th>
-                        <td>104 hours 54 minutes</td>
-                    </tr>
-
-                </table>
-
-                <div class="controls hidden"></div>
-
-            </section>
-
-            <section class="data-section project-section shadow width-100">
-
-                <h2>Jobin</h2>
-
-                <table class="project-info">
-
-                    <tr>
-                        <th>Date created:</th>
-                        <td>20.6.2021</td>
-                    </tr>
-
-                    <tr>
-                        <th>Number of tasks:</th>
-                        <td>985</td>
-                    </tr>
-
-                    <tr>
-                        <th>Unpaid work-time:</th>
-                        <td class="text-green">1 hour 0 minutes</td>
-                    </tr>
-
-                    <tr>
-                        <th>Total project work-time:</th>
-                        <td>1586 hours 20 minutes</td>
-                    </tr>
-
-                </table>
-
-                <div class="controls hidden"></div>
-
-            </section>
-
-            <section class="data-section project-section shadow width-100">
-
-                <h2>Elcop - prihlaska</h2>
-
-                <table class="project-info">
-
-                    <tr>
-                        <th>Date created:</th>
-                        <td>30.7.2022</td>
-                    </tr>
-
-                    <tr>
-                        <th>Number of tasks:</th>
-                        <td>0</td>
-                    </tr>
-
-                    <tr>
-                        <th>Total project work-time:</th>
-                        <td>1586 hours 20 minutes</td>
-                    </tr>
-
-                </table>
-
-                <div class="controls hidden"></div>
-
-            </section>
-
-            <section class="data-section project-section shadow width-100">
-
-                <h2>MiniRelaxMier</h2>
-
-                <table class="project-info">
-
-                    <tr>
-                        <th>Date created:</th>
-                        <td>1.8.2022</td>
-                    </tr>
-
-                    <tr>
-                        <th>Number of tasks:</th>
-                        <td>15</td>
-                    </tr>
-
-                    <tr>
-                        <th>Unpaid work-time:</th>
-                        <td class="text-green">89 hours 59 minutes</td>
-                    </tr>
-
-                    <tr>
-                        <th>Total project work-time:</th>
-                        <td>3 hours 20 minutes</td>
-                    </tr>
-
-                </table>
-
-                <div class="controls hidden"></div>
-
-            </section>
-
-            <section class="data-section project-section shadow width-100">
-
-                <h2>Time-tracker</h2>
-
-                <table class="project-info">
-
-                    <tr>
-                        <th>Date created:</th>
-                        <td>28.7.2022</td>
-                    </tr>
-
-                    <tr>
-                        <th>Number of tasks:</th>
-                        <td>5</td>
-                    </tr>
-
-                    <tr>
-                        <th>Total project work-time:</th>
-                        <td>1 hours 20 minutes</td>
-                    </tr>
-
-                </table>
-
-                <div class="controls hidden"></div>
-
-            </section>
-
-            -->
-
         </div>
 
         <div class="content-statistics-wrapper-statistics">
@@ -221,22 +118,27 @@ $projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM project
 
                     <tr>
                         <th>Working time past 7 days:</th>
-                        <td>56 hours 41 minutes</td>
+                        <td><?php echo Format::format_seconds($group->work_time_7_days); ?></td>
+                    </tr>
+
+                    <tr>
+                        <th>Total work-time:</th>
+                        <td><?php echo Format::format_seconds($group->work_time); ?></td>
                     </tr>
 
                     <tr>
                         <th>Total unpaid work-time:</th>
-                        <td class="text-green">56 hours 41 minutes</td>
+                        <td class="text-green"><?php echo Format::format_seconds($group->unpaid_work_time); ?></td>
                     </tr>
 
                     <tr>
                         <th>Hourly wage:</th>
-                        <th>6 €</th>
+                        <th><?php echo $wage . ' €'; ?></th>
                     </tr>
 
                     <tr>
                         <th>Salary:</th>
-                        <td class="text-green"><strong>339,99 €</strong></td>
+                        <td class="text-green"><strong><?php echo number_format($group->salary, 2) . ' €'; ?></strong></td>
                     </tr>
 
                 </table>
