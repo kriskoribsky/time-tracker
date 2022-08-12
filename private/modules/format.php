@@ -58,19 +58,19 @@ class Format {
 
     // returns string in the format %G hours : %i minutes
     public static function format_seconds(int $seconds): string {
-        $hours_minutes = explode(':', gmdate('G:i', $seconds));
+        $hours = floor($seconds / 60 / 60);
 
-        $hours = $hours_minutes[0];
-        $minutes = $hours_minutes[1];
+        $seconds -= $hours * 60 * 60;
 
-        // remove leading zeros in case of minutes
-        $minutes = (string) (int) $minutes;
+        $minutes = floor($seconds / 60);
 
-        // don't display hours if they are == '0'
-        if (!$hours) {
-            return $minutes == '1' ? $minutes . ' minute' : $minutes . ' minutes';
+        $h_postfix = $hours === 1 ? 'hour' : 'hours';
+        $m_postfix = $minutes === 1 ? 'minute' : 'minutes';
+
+        if ($hours) {
+            return (string) $hours . ' ' . $h_postfix . ' ' . (string) $minutes . ' ' . $m_postfix; 
         } else {
-            return $hours . ' hours ' . ($minutes == '1' ? $minutes . ' minute' : $minutes . ' minutes');
+            return (string) $minutes . ' ' . $m_postfix;
         }
     }
 
