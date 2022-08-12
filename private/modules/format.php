@@ -56,11 +56,22 @@ class Format {
         return ($hours * 60 * 60) + ($minutes * 60);
     }
 
-    // returns string in the format %H hours : %i minutes
+    // returns string in the format %G hours : %i minutes
     public static function format_seconds(int $seconds): string {
         $hours_minutes = explode(':', gmdate('G:i', $seconds));
 
-        return $hours_minutes[0] . ' hours ' . $hours_minutes[1] . ' minutes';
+        $hours = $hours_minutes[0];
+        $minutes = $hours_minutes[1];
+
+        // remove leading zeros in case of minutes
+        $minutes = (string) (int) $minutes;
+
+        // don't display hours if they are == '0'
+        if (!$hours) {
+            return $minutes == '1' ? $minutes . ' minute' : $minutes . ' minutes';
+        } else {
+            return $hours . ' hours ' . ($minutes == '1' ? $minutes . ' minute' : $minutes . ' minutes');
+        }
     }
 
     // dynamically generates sidebar nav secondary gradient color based on primary
