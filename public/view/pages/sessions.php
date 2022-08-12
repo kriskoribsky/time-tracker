@@ -1,6 +1,7 @@
 <?php 
-# Query database for projects
-$projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM projects ORDER BY date_created DESC"));
+// # Query database for projects only from session's project group
+$sql = 'SELECT * from projects WHERE project_group_id=:group_id ORDER BY date_created DESC';
+$projects = Sanitize::sanitize_html_query(Database::query($sql, ['group_id' => $_SESSION['group_id']]));
 
 
 
