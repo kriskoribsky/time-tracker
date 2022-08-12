@@ -62,6 +62,7 @@
 
     <!-- scripts -->
     <script src="/view/js/main.js?<?php echo time(); ?>" defer></script>
+    <script src="/view/js/graph.js?<?php echo time(); ?>" defer></script>
 
     <!-- favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/view/assets/img/favicons/favicon-32x32.png">
