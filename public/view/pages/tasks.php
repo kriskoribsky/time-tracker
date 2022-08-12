@@ -99,7 +99,10 @@ foreach ($projects as $project) {
 
                 <section class="data-section shadow">
 
-                    <h2>Add new tasks to your project</h2>
+                    <h2 class="split-heading">
+                        <span>Add new tasks to your project</span>
+                        <i class="fa-solid fa-plus"></i>
+                    </h2>
 
                     <form class="form" action="/forms" method="POST">
 

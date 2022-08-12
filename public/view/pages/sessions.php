@@ -80,7 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <section class="data-section shadow add-session">
 
-        <h2>Track new working session</h2>
+        <h2 class="split-heading">
+            <span>Track new working session</span>
+            <i class="fa-solid fa-plus"></i>
+        </h2>
 
         
             <form class="form" action="<?php echo Sanitize::sanitize_html($_SERVER['REQUEST_URI']); ?>" method="POST">
