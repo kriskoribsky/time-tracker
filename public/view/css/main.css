@@ -107,6 +107,10 @@ p {
     color: var(--section-text-color);
 }
 
+.text-primary {
+    color: var(--primary-color);
+}
+
 .side-bar {
     display: flex;
     flex-direction: column;
