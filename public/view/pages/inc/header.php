@@ -11,7 +11,7 @@
             <h1 class="main-logo">
                 <a href="/project-groups">
                     <i class="fa-solid fa-clock"></i>
-                    <span>Time-tracker</span>
+                    <span><?php echo $_SESSION['group_title']; ?></span>
                 </a>
             </h1>
 

@@ -129,13 +129,18 @@ p {
 
 .main-logo a {
     display: flex;
-    justify-content: center;
     align-items: center;
+    margin-left: 0.18em;
 }
 
 .main-logo span {
     margin-left: 0.4em;
     font-size: 0.6em;
+}
+
+.main-logo.landing-page-logo a {
+    margin-left: 0;
+    justify-content: center;
 }
 
 .nav {
@@ -490,6 +495,25 @@ table th, table td {
 
 .overall-statistics {
     width: 100%;
+}
+
+.current-config {
+    font-size: 1em;
+}
+
+.current-config th {
+    font-weight: normal;
+    width: 20%;
+}
+
+.current-config .time-format {
+    color: var(--warning-color);
+}
+
+.split-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .overall-statistics canvas {
