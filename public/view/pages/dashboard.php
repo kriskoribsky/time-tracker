@@ -40,6 +40,20 @@ foreach ($config_query as $query) {
 $display_net = (bool) $config['display_net_time'];
 $wage = $config['salary_rate'];
 
+// project specific statistics
+foreach ($group->subComponents as $project) {
+    $project_sessions = [];
+
+    foreach($project->get_instances(Session::class) as $session) {
+        $project_sessions[] = $session;
+    }
+
+    $project->work_time = $project->get_sessions_work($project_sessions, $display_net);
+    $project->unpaid_work_time = $project->get_unpaid_work($project_sessions, $display_net);
+    $project->net_ratio = $project->get_net_ratio($project_sessions);
+
+}
+
 // overall statistics
 $group_sessions = [];
 
@@ -51,6 +65,7 @@ $group->work_time_7_days = $group->get_latest_sessions_work($group_sessions, $di
 $group->work_time = $group->get_sessions_work($group_sessions, $display_net);
 $group->unpaid_work_time = $group->get_unpaid_work($group_sessions, $display_net);
 $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
+$group->net_ratio = $group->get_net_ratio($group_sessions);
 ?>
 
 
@@ -77,24 +92,30 @@ $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
                     <table class="project-info">
 
                         <tr>
-                            <th>Date created:</th>
+                            <th>Created</th>
                             <td><?php echo Format::database_time($project->date_created); ?></td>
                         </tr>
 
                         <tr>
-                            <th>Number of tasks:</th>
+                            <th>Tasks</th>
                             <td><?php echo count($project->subComponents); ?></td>
                         </tr>
 
                         <tr>
-                            <th>Unpaid work-time:</th>
-                            <td class="text-green">5 hours 1 minute</td>
+                            <th>Work-time</th>
+                            <td><?php echo Format::format_seconds($project->work_time); ?></td>
                         </tr>
 
                         <tr>
-                            <th>Total project work-time:</th>
-                            <td>104 hours 54 minutes</td>
+                            <th>Unpaid work-time</th>
+                            <td class="text-green"><?php echo Format::format_seconds($project->unpaid_work_time); ?></td>
                         </tr>
+
+                        <tr title="Time spent effectively solely on coding (higher = better)">
+                            <th>Effectivity ratio</th>
+                            <td><?php echo $project->net_ratio; ?></td>
+                        </tr>
+
 
                     </table>
 
@@ -110,7 +131,10 @@ $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
 
             <section class="data-section overall-statistics shadow">
 
-                <h2>Overall statistics</h2>
+                <h2 class="split-heading">
+                    <span>Overall statistics</span>
+                    <i class="fa-solid fa-chart-simple"></i>
+                </h2>
 
                 <canvas></canvas>
 
@@ -122,22 +146,27 @@ $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
                     </tr>
 
                     <tr>
-                        <th>Total work-time:</th>
+                        <th>Work-time</th>
                         <td><?php echo Format::format_seconds($group->work_time); ?></td>
                     </tr>
 
                     <tr>
-                        <th>Total unpaid work-time:</th>
+                        <th>Unpaid work-time</th>
                         <td class="text-green"><?php echo Format::format_seconds($group->unpaid_work_time); ?></td>
                     </tr>
 
+                     <tr title="Time spent effectively solely on coding (higher = better)">
+                            <th>Effectivity ratio</th>
+                            <td><?php echo $group->net_ratio; ?></td>
+                    </tr>
+
                     <tr>
-                        <th>Hourly wage:</th>
+                        <th>Hourly wage</th>
                         <th><?php echo $wage . ' €'; ?></th>
                     </tr>
 
                     <tr>
-                        <th>Salary:</th>
+                        <th>Salary</th>
                         <td class="text-green"><strong><?php echo number_format($group->salary, 2) . ' €'; ?></strong></td>
                     </tr>
 
@@ -153,6 +182,25 @@ $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
                     </button>
 
                 </div>
+
+            </section>
+            
+            <section class="data-section overall-statistics shadow current-config">
+
+                <h2 class="split-heading">
+                    <span>Display configuration</span>
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                </h2>
+
+                <table class="text-left">
+                    
+                    <tr title="<?php echo $display_net ? 'Currently displaying in net-time format' : 'Currently displaying in gross-time format'; ?>">
+                        <th>Time format:</th>
+                        <td class="time-format"><em><?php echo $display_net ? 'net' : 'gross' ?></em></td>
+                    </tr>
+
+
+                </table>
 
             </section>
 
