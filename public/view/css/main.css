@@ -464,9 +464,8 @@ table th, table td {
     padding: 0.2em;
 }
 
-
-.project-info {
-    max-width: 70%;
+.project-info th {
+    width: 40%;
 }
 
 .project-info {
