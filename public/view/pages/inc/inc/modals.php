@@ -123,9 +123,11 @@
                     <span>Close</span>
                 </a>
 
-                <button type="submit" class="form-btn modal-btn btn-danger">
+                <button type="submit" name="submit" value="time-checkout" class="form-btn modal-btn btn-danger">
                     <i class="fa-solid fa-clock"></i><span>Checkout unpaid time</span>
                 </button>
+
+                <input type="hidden" name="group_id" value="<?php echo $_SESSION['group_id']; ?>">
 
             </div>
 

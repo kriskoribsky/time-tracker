@@ -52,8 +52,36 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             // checkout time
-            
+            case 'time-checkout':
 
+                try {
+                    // go trough all sessions of the given project-group and reset 'gross_checkout_time' as well as 'net_checkout_time'
+                    $projects = Database::query('SELECT * from projects WHERE project_group_id=:group_id', [
+                        'group_id' => $_POST['group_id']], PDO::FETCH_OBJ);
+
+                    foreach ($projects as $project) {
+                        $tasks = Database::query('SELECT * from tasks WHERE project_id=:project_id', [
+                            'project_id' => $project->id], PDO::FETCH_OBJ);
+
+                        foreach ($tasks as $task) {
+                            $sql = 'UPDATE sessions SET gross_checkout_time=:no_gross_time, net_checkout_time=:no_net_time WHERE task_id=:task_id';
+                            Database::query($sql, [
+                                'no_gross_time' => 0,
+                                'no_net_time' => 0, 
+                                'task_id' => $task->id
+                                ]);
+                        }
+                    }
+
+
+                } catch (PDOException $e) {
+                    header('Location: /dashboard?m=failed');
+                    exit();
+                }
+
+                header('Location: /dashboard');
+                exit();                
+                break;
 
             // add task
             case 'new-task':
@@ -145,9 +173,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 exit();
                 break;
 
-            default:
-                header('Location: /error');
-                exit();
 
             // changes in configuration
             case 'configuration-change':
@@ -174,11 +199,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                 header('Location: /configuration?m=ok&o=config options');
                 exit();
- 
                 break;
-            }
 
-        break;
+            default:
+                header('Location: /error');
+                exit();
+        }
 
     case 'GET':
         break;
