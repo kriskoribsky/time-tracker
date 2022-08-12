@@ -43,6 +43,9 @@ if (isset($_POST['group_id'])) {
         if ($group->id == $_POST['group_id']) {
             $_SESSION['group_id'] = $group->id;
             $_SESSION['group_title'] = $group->title;
+            $_SESSION['primary_color'] = $group->primary_color;
+            $_SESSION['secondary_gradient_color'] = $group->primary_gradient_second_color;
+            $_SESSION['text_color'] = $group->text_color;
             $_SESSION['expire'] = time() + 24 * 60 * 60; // set session for one day
 
             header('Location: /dashboard');
@@ -61,7 +64,7 @@ if (isset($_POST['group_id'])) {
         <?php require_once 'inc/inc/modals.php' ?>
 
         <header>
-            <h1 class="main-logo">
+            <h1 class="main-logo landing-page-logo">
                 <a href="/project-groups">
                     <i class="fa-solid fa-clock"></i>
                     <span>Time-tracker</span>
