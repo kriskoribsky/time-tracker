@@ -53,6 +53,33 @@ class DatabaseObject
         return $seconds;
     }
 
+    // returns past x days work (each day in array containing total work seconds that day)
+    public function past_days_work(array $sessions, bool $display_net_time, int $past_days = 7): array {
+        // common datetime format in which dates will be compared
+        $format = 'Y-m-d';
+        $dayname = 'D';
+
+        // associative array of day name => total work seconds that day (in ascending order = starting $days days ago)
+        $days = [];
+
+        for ($i = 0; $i < $past_days; $i++) {
+            $datetime = new DateTime("-{$i} days");
+
+            $day_work = 0;
+
+            foreach ($sessions as $session) {
+                $session_datetime = new DateTime($session->date_created);
+
+                if ($datetime->format($format) === $session_datetime->format($format)) {
+                    $day_work += $display_net_time ? $session->net_time : $session->gross_time;
+                }
+            }
+            $days[$datetime->format($dayname)] = $day_work;
+        }
+
+        return $days;
+    }
+
     public function get_unpaid_work(array $sessions, bool $display_net_time): int {
       $seconds = 0;
 
