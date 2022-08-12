@@ -95,7 +95,7 @@
 <!-- modal checkout working hours -->
 <div class="modal" id="checkout-work-time-modal" style="display: none;">
     <div class="modal-dialog" role="document">
-        <form action="" method="POST" class="modal-content form">
+        <form action="/forms" method="POST" class="modal-content form">
 
             <div class="modal-header">
                 
@@ -110,7 +110,7 @@
             <div class="modal-body">
 
                 <div class="alert warning" role="alert">
-                    Warning! This action will reset your unpaid work-time across <strong>all projects.</strong><br><br>
+                    Warning! This action will reset your unpaid work-time across <strong>all projects</strong> in <strong class="text-primary"><?php echo $_SESSION['group_title']; ?></strong> project group.<br><br>
                     Are you sure you want to continue?
                 </div>
 
