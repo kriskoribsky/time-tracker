@@ -74,14 +74,16 @@ class DatabaseObject
     }
 
     // effectivity net_time_ratio (2 decimals)
-    public function get_net_ratio(array $sessions): float {
+    public function get_net_ratio(array $sessions): string {
+        if (!$sessions) return '';
+
         $ratios = 0;
 
         foreach ($sessions as $session) {
             $ratios += $session->net_time_ratio;
         }
 
-        return round($ratios / count($sessions), 2);
+        return (string) round($ratios*100 / count($sessions), 2) . '%';
     }
 }
 
