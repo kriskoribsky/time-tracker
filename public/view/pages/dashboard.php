@@ -66,6 +66,7 @@ $group->work_time = $group->get_sessions_work($group_sessions, $display_net);
 $group->unpaid_work_time = $group->get_unpaid_work($group_sessions, $display_net);
 $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
 $group->net_ratio = $group->get_net_ratio($group_sessions);
+
 ?>
 
 
