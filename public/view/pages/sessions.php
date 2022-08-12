@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-row">
                     <label for="task-selection">Task:</label>
-                    <select class="selection-dropdown" name="task-id" id="task-selection" required>
+                    <select class="selection-dropdown" name="task-id" id="task-selection" required <?php echo empty($tasks) ? 'disabled' : ''; ?>>
 
                         <option value="" disabled hidden selected>Choose a task</option>
                         <?php foreach($tasks as $task): ?>
