@@ -1,6 +1,6 @@
 <?php
 // query project groups -> their projects & tasks & last session edit date
-$queried_groups = Database::query('SELECT * from project_groups', null, PDO::FETCH_OBJ);
+$queried_groups = Database::query('SELECT * from project_groups ORDER BY date_created DESC', null, PDO::FETCH_OBJ);
 $queried_projects = Database::query('SELECT * from projects', null, PDO::FETCH_OBJ);
 $queried_tasks = Database::query('SELECT * from tasks', null, PDO::FETCH_OBJ);
 $queried_sessions = Database::query('SELECT * from sessions', null, PDO::FETCH_OBJ);
