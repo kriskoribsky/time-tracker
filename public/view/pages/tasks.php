@@ -1,12 +1,43 @@
 <?php 
-# Query database for projects
-$projects = Sanitize::sanitize_html_query(Database::query("SELECT * FROM projects ORDER BY date_created DESC"));
+// # Query database for projects only from session's project group
+$sql = 'SELECT * from projects WHERE project_group_id=:group_id ORDER BY date_created DESC';
+$projects = Sanitize::sanitize_html_query(Database::query($sql, ['group_id' => $_SESSION['group_id']]));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['submit-project'])) {
-        $sql = "SELECT * FROM tasks WHERE project_id=:selected_project ORDER BY date_created DESC";
 
-        $tasks = Sanitize::sanitize_html_query(Database::query($sql, ['selected_project' => $_POST['submit-project']]));
+        // query DB for tasks, session & initialize their ORM objects
+        $sql = "SELECT * FROM tasks WHERE project_id=:selected_project ORDER BY date_created DESC";
+        $queried_tasks = Database::query($sql, ['selected_project' => $_POST['submit-project']], PDO::FETCH_OBJ);
+        $tasks = [];
+
+        foreach($queried_tasks as $t) {
+            $queried_sessions = Database::query('SELECT * from sessions WHERE task_id=:task_id', ['task_id' => $t->id], PDO::FETCH_OBJ);
+            $sessions = [];
+
+            foreach ($queried_sessions as $s) {
+                $sessions[] = new Session($s);
+            }
+            $tasks[] = new Task($t, $sessions);
+        }
+
+        // query DB for current configuration settings
+        $config_query = Sanitize::sanitize_html_query(Database::query('SELECT option_name, value FROM app_config'));
+
+        foreach ($config_query as $query) {
+            $config[$query['option_name']] = $query['value'];
+        }
+        $display_net = (bool) $config['display_net_time'];
+
+
+        // calculate working times with DataBase object's methods
+        foreach ($tasks as $task) {
+            $task->work_time = $task->get_sessions_work($task->subComponents, $display_net);
+            $task->unpaid_work_time = $task->get_unpaid_work($task->subComponents, $display_net);
+            $task->net_ratio = $task->get_net_ratio($task->subComponents); 
+
+        }
+
     }
 }
 
@@ -58,28 +89,31 @@ foreach ($projects as $project) {
 
                 <section class="data-section shadow">
 
-                    <h2><?php echo $task['title']; ?></h2>
+                    <h2 class="split-heading">
+                        <span><?php echo $task->title; ?></span>
+                        <span title="The date this task was created" class="text-created-at"><?php echo Format::database_time($task->date_created); ?></span>
+                    </h2>
 
                     <table class="project-info">
 
-                            <!-- <tr>
-                                <th>Date created:</th>
-                                <td><?php echo implode('.', array_reverse(explode('-', explode(' ', $task['date_created'])[0]))); ?></td>
-                            </tr> -->
-
                             <tr>
-                                <th>Number of sessions:</th>
-                                <td>5</td>
+                                <th>Sessions:</th>
+                                <td><?php echo count($task->subComponents); ?></td>
                             </tr>
 
                             <tr>
-                                <th>Unpaid task work-time:</th>
-                                <td class="text-green">5 hours 1 minute</td>
+                                <th>Work-time:</th>
+                                <td><?php echo Format::format_seconds($task->work_time); ?></td>
                             </tr>
 
                             <tr>
-                                <th>Total task work-time:</th>
-                                <td>104 hours 54 minutes</td>
+                                <th>Unpaid work-time:</th>
+                                <td class="text-green"><?php echo Format::format_seconds($task->unpaid_work_time); ?></td>
+                            </tr>
+
+                            <tr title="Time spent effectively solely on coding (higher = better)">
+                                <th>Effectivity ratio</th>
+                                <td><?php echo $task->net_ratio; ?></td>
                             </tr>
 
                         </table>
@@ -92,12 +126,12 @@ foreach ($projects as $project) {
 
         </div>
 
-        <!-- add-session part -->
+        <!-- add-task part -->
         <?php if(isset($_POST['submit-project'])): ?>
 
             <div class="add-task">
 
-                <section class="data-section shadow">
+                <section class="data-section shadow addional-padding-bottom">
 
                     <h2 class="split-heading">
                         <span>Add new tasks to your project</span>
@@ -136,6 +170,24 @@ foreach ($projects as $project) {
                         <div class="alert danger hidden" role="alert">Please choose a project and try again</div>
 
                     </form>
+
+                </section>
+
+                <section class="data-section overall-statistics shadow current-config">
+
+                    <h2 class="split-heading">
+                        <span>Display configuration</span>
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </h2>
+
+                    <table class="text-left">
+                    
+                        <tr title="<?php echo $display_net ? 'Currently displaying in net-time format' : 'Currently displaying in gross-time format'; ?>">
+                            <th>Time format:</th>
+                            <td class="time-format"><em><?php echo $display_net ? 'net' : 'gross' ?></em></td>
+                        </tr>
+
+                    </table>
 
                 </section>
 

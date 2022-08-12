@@ -103,6 +103,10 @@ p {
     color: var(--green-color);
 }
 
+.text-grey {
+    color: var(--section-text-color);
+}
+
 .side-bar {
     display: flex;
     flex-direction: column;
@@ -306,6 +310,10 @@ main {
 
 .data-section label {
     margin-right: 0.4em;
+}
+
+.addional-padding-bottom {
+    padding-bottom: 0.4em;
 }
 
 .selection-dropdown {
@@ -514,6 +522,11 @@ table th, table td {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.text-created-at {
+    color: var(--section-text-color);
+    font-weight: normal;
 }
 
 .overall-statistics canvas {
