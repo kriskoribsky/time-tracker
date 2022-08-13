@@ -150,7 +150,7 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
 
                     <tr>
                         <th>Working time past 7 days:</th>
-                        <td><?php echo Format::format_seconds($group->past_days_total); ?></td>
+                        <td><span class="past-days-work"><?php echo Format::format_seconds($group->past_days_total); ?></span></td>
                     </tr>
 
                     <tr>
