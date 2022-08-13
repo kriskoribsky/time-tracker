@@ -61,8 +61,8 @@ foreach ($group->get_instances(Session::class) as $session) {
     $group_sessions[] = $session;
 } 
 
-$group->work_time_7_days = $group->get_latest_sessions_work($group_sessions, $display_net);
-$group->work_time_7_days_graph = $group->past_days_work($group_sessions, $display_net);
+$group->past_days_work = $group->past_days_work($group_sessions, $display_net);
+$group->past_days_total = array_sum(array_values($group->past_days_work));
 $group->work_time = $group->get_sessions_work($group_sessions, $display_net);
 $group->unpaid_work_time = $group->get_unpaid_work($group_sessions, $display_net);
 $group->salary = $group->get_salary($group->unpaid_work_time, $wage);
@@ -138,15 +138,19 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
                     <i class="fa-solid fa-chart-simple"></i>
                 </h2>
 
-                <div class="canvas-contaier">
-                    <canvas id="work-time-graph" data-graph-data="<?php echo htmlspecialchars(json_encode($group->work_time_7_days_graph), ENT_QUOTES, 'UTF-8'); ?>"></canvas>
+                <div class="canvas-container">
+                    <div class="graph-area">
+                        <div class="graph-size-monitor">
+                            <canvas id="work-time-graph" data-graph-data="<?php echo htmlspecialchars(json_encode($group->past_days_work), ENT_QUOTES, 'UTF-8'); ?>"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <table class="text-left">
 
                     <tr>
                         <th>Working time past 7 days:</th>
-                        <td><?php echo Format::format_seconds($group->work_time_7_days); ?></td>
+                        <td><?php echo Format::format_seconds($group->past_days_total); ?></td>
                     </tr>
 
                     <tr>

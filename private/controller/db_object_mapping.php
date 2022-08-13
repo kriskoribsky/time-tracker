@@ -39,20 +39,6 @@ class DatabaseObject
         return $seconds;
     }
 
-    public function get_latest_sessions_work(array $sessions, bool $display_net_time, string $time_frame = '-7 days'): int {
-        $seconds = 0;
-
-        foreach ($sessions as $session) {
-            $session_date = new DateTime($session->date_created);
-            $limit = new DateTime($time_frame);
-
-            if ($session_date > $limit) {
-                $seconds += $this->get_work_seconds($session, $display_net_time);
-            }
-        }
-        return $seconds;
-    }
-
     // returns past x days work (each day in array containing total work seconds that day)
     public function past_days_work(array $sessions, bool $display_net_time, int $past_days = 7): array {
         // common datetime format in which dates will be compared
