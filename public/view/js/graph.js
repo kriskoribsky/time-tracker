@@ -209,29 +209,18 @@
             
             points.push(pos);
 
-            // fill space under line
-            // ctx.globalAlpha = 0.15;
-            // ctx.lineTo(x, height - startY);
-            // ctx.lineTo(x - xIncrement, height - startY);
-            // ctx.fill();
-            // ctx.globalAlpha = 1;
-
             // legend text
             ctx.beginPath();
             ctx.fillStyle = legendColor;
             ctx.fillText(units["x"][i], x, height - p + floorPixel(p));
-            // data intersection dot
-            // ctx.fillStyle = lineColor;
-            // ctx.arc(x, height - y, radius, 0, Math.PI * 2);
-            // ctx.fill();
 
             x += xIncrement;
         }
-        // Main graph line
+        // Main graph columns
         // ==========================================================================
         ctx.strokeStyle = lineColor;
         ctx.fillStyle = lineColor;
-        ctx.lineWidth = mainLineWidth
+        ctx.lineWidth = mainLineWidth;
         ctx.setLineDash([]);
         ctx.beginPath();
 
@@ -239,25 +228,8 @@
         ctx.moveTo(points[0].x, points[0].y);
 
         for (var i=1; i < points.length - 2; i++) {
-            var cpx = (points[i].x + points[i+1].x) / 2;
-            var cpy = (points[i].y + points[i+1].y) / 2;
-            ctx.quadraticCurveTo(points[i].x, points[i].y, cpx, cpy);
-            ctx.stroke();
-
-            // dot
-            ctx.beginPath();
-            ctx.arc(points[i].x, points[i].y, radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-
-            // ctx.moveTo(points[i].x, points[i].y);
+            
         }
-        
-        ctx.quadraticCurveTo(points[i].x, points[i].y, points[i+1].x, points[i+1].y);
-        ctx.stroke();
-
-
-
     }
 
     function updateCanvasSize() {
