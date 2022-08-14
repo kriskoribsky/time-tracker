@@ -56,44 +56,124 @@
     // chart data retrieving & manipulation
     // ==========================================================================
     const canvas = document.getElementById("work-time-graph");
+    let ctx;
     const parsed_data = JSON.parse(canvas.getAttribute("data-graph-data"));
-    const keys = Object.keys(parsed_data);
-    const values = Object.values(parsed_data).reverse();
-    let units = [];
-    let upperBound;
+
+
+    let maxValue;
     const minutesPostfix = 'min';
     const hoursPostfix = 'h';
 
+    let units = {};
+    let values = {};
+
+    values.x = Object.values(parsed_data).reverse();
     // reverse data object since the rendering will start from the oldest day
-    units["x"] = keys.reverse();
-    [units["y"], upperBound] = getYunits(values);
+    units.x = Object.keys(parsed_data).reverse();
+    [units.y, maxValue] = getYunits(values.x);
 
     const longestYunit = (() => {
-        max = units["y"][0];
+        max = units.y[0];
 
-        for (let i=1; i < units["y"].length; i++) {
-            if (units["y"][i].length > max.length) {
-                max = units["y"][i];
+        for (let i=1; i < units.y.length; i++) {
+            if (units.y[i].length > max.length) {
+                max = units.y[i];
             }
         }
         return max;
     })();
 
-    console.log("xUnits:", units["x"]);
-    console.log("values:", values);
-    console.log("yUnits:", units["y"]);
+    console.log("xUnits:", units.x);
+    console.log("values:", values.x);
+    console.log("yUnits:", units.y);
 
-    // get dynamic graph colors (which depend on project group selected in landing page)
+    // get graph colors (which depend on project group selected in landing page)
     const bodyStyles = window.getComputedStyle(document.body);
-    const lineColor = bodyStyles.getPropertyValue("--primary-color");
+    const columnPrimaryClr = bodyStyles.getPropertyValue("--primary-color");
+    const columnGradientClr = bodyStyles.getPropertyValue("--primary-gradient-secondary-color");
     const legendColor = bodyStyles.getPropertyValue("--section-text-color");
-
     const legendFont = "Roboto, -apple-system, sans-serif";
 
+
+
+    // Static canvas objects sizes
+    // ==========================================================================
     // 5% padding between graph objects
     const internalPadding = 0.05;
     // pixel count increase on-canvas to improve crispiness
     const res = 2;
+    // how fast do columns move (px per second) in animation (rise from ground up effect)
+    const colAnimationSpeed = 12;
+    // animation only on page reload
+    let animationDone = false;
+    
+    // gap between graph columns (higher = narrower columns)
+    const colGapRatio = 1.6;
+
+
+
+    // Dynamic canvas objects sizes
+    // ==========================================================================
+    let p; // padding
+    let g; // gap
+    let width;
+    let height;
+
+    let ratio;
+    // graph starting points
+    let origin = {};
+
+    // required horizontal space for legend on Y axis
+    let maxTextWidth;
+
+    // gap between graph columns
+    let colGap;
+
+    // maximal graph value height on canvas
+    let ceiling;
+    let colWidth;
+
+    // path2d object of graph columns for displaying tooltip canvas on hover
+    let columns = [];
+
+
+    // Hover tooltip
+    // ==========================================================================
+    var over;
+
+    canvas.addEventListener("mousemove", event => {
+        // console.log(event.clientX, event.clientY);
+        // console.log(event.offsetX, event.offsetY);
+
+        // loop trough columns objects and check for hover
+        over = false;
+        for (let i = 0; i < columns.length; i++) {
+            if (ctx.isPointInPath(columns[i].path, event.offsetX * ratio, event.offsetY * ratio)) {
+                if (!columns[i].hovering) {
+
+                    ctx.globalAlpha = 0.8;
+                    ctx.clearRect(...columns[i].rect);
+                    ctx.fill(columns[i].path);
+                    ctx.globalAlpha = 0.6;
+
+                    columns[i].hovering = true;
+
+                    console.log(columns[i].data);
+
+                } else {
+                    over = true;
+                }
+
+            } else {
+                columns[i].hovering = false;
+                ctx.clearRect(...columns[i].rect);
+                ctx.fill(columns[i].path);
+            }
+        }
+
+        canvas.style.cursor = over ? "pointer" : "default";
+    })
+
 
     // canvas rendering
     // ==========================================================================
@@ -129,7 +209,6 @@
 
         return [cp1x, cp1y, cp2x, cp2y, x2, y2];
     }
-
     function quadraticBezier(x1, y1, x2, y2) {
         
         console.log(`x1: ${x1} y1: ${y1} x2: ${x2} y2: ${y2}`);
@@ -143,105 +222,185 @@
         return [sx, sy, x2, y2];
     }
 
-    function renderGraph(width, height, ratio) {
-        const ctx = canvas.getContext("2d");
+    function animateColumns(cols) {
+        // animation on page reload else just render columns without animation
+        if (!animationDone) {
+            let animationFinished = true;
 
-        // calculate graph padding
-        const p = ceilPixel(internalPadding * Math.max(canvas.width, canvas.height));
-        // gap betwwen graph elements
-        const g = ceilPixel(p / 2);
+            // raise col's height by predefined animation speed & request new animation frame
+            for (let i = 0; i < cols.length; i++) {
 
-        // dynamic sizes
-        ctx.font = (12 * ratio) + "px " + legendFont;
-        const radius = ceilPixel((p / 16) * ratio);
-        const mainLineWidth = floorPixel(radius / 2) + 0.5;
-        const horizontalLineWidth = 0.5;
-        const horizontalLineDash = [3 * ratio, 3 * ratio];
+                if (cols[i].y < cols[i].ceil) {
+                    animationFinished = false;
 
-        // Render Y axis
-        // ==========================================================================
-        ctx.fillStyle = legendColor;
+                    if (cols[i].y + colAnimationSpeed > cols[i].ceil) {
+                        cols[i].y = cols[i].ceil;
+                    } else {
+                        cols[i].y += colAnimationSpeed;
+                    }
+                    ctx.clearRect(cols[i].x, height - cols[i].y, colWidth, cols[i].y - origin.y);
+                    ctx.fillRect(cols[i].x, height - cols[i].y, colWidth, cols[i].y - origin.y);
+                }
+            }
+
+            if (!animationFinished) {
+                window.requestAnimationFrame(() => {animateColumns(cols)});
+            } else {
+                window.requestAnimationFrame(() => {animateColumns(cols)});
+                animationDone = true;
+            }
+        } else {
+            // after animation is done, clear rectangle and instead replace them with path2d objects
+            // for isPointInPath() checking on hovering them
+            // clear last column objects
+            columns = [];
+            
+            for (let i = 0; i < cols.length; i++) {
+                // column object construction
+                let column = {};
+                column.data = values.x[i];
+                column.day = units.x[i];
+                column.point = [cols[i].x + colWidth / 2, cols[i].y];
+                column.rect = [cols[i].x, height - cols[i].ceil, colWidth, cols[i].ceil - origin.y];
+                column.hovering = false;
+
+                var path = new Path2D();
+                path.rect(cols[i].x, height - cols[i].ceil, colWidth, cols[i].ceil - origin.y);
+
+                ctx.clearRect(...column.rect);
+                ctx.fill(path);
+
+                column.path = path;
+
+
+                columns.push(column);
+            }
+
+            console.log(columns);
+        }
+    }
+
+    function renderYaxis() {
+        // save previous context settings & restore them after function
+        ctx.save();
+
         ctx.strokeStyle = legendColor;
-        ctx.lineWidth = horizontalLineWidth;
-        ctx.setLineDash(horizontalLineDash);
+        ctx.fillStyle = legendColor;
+        // horizontal lines
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4 * ratio, 4 * ratio]);
+
+        // legend text
         ctx.textBaseline = "middle";
         ctx.textAlign = "end";
 
-        const startY = p;
-        // measure required horizontal space
-        const textWidth = ceilPixel(ctx.measureText(longestYunit).width);
-        const yIncrement = floorPixel((height - 2 * p) / (units["y"].length-1));
+        let y = p;
+        const yIncrement = floorPixel((height - 2 * p) / (units.y.length-1));
 
-        let y = startY;
-        for (let i=0; i < units["y"].length; i++) {
+        for (let i=0; i < units.y.length; i++) {
             // y axis legend text
-            ctx.fillText(units["y"][i], textWidth, height - y);
+            ctx.fillText(units.y[i], maxTextWidth, height - y);
 
             // dashed line with aplha value
-            ctx.globalAlpha = 0.7;
+            ctx.globalAlpha = 0.4;
 
             ctx.beginPath();
-            // little shift (g/2) to the right for the xAxis legend
-            ctx.moveTo(textWidth + g - g/2, height - y);
+            // little shift (g) to the right for the xAxis legend
+            ctx.moveTo(origin.x - g/2, height - y);
             ctx.lineTo(width - p + g/2, height - y);
             ctx.stroke();
             ctx.globalAlpha = 1;
 
             y += yIncrement;
         }
-        const endY = y - yIncrement;
+        ctx.restore();
 
-        // Render X axis
-        // ==========================================================================
+        // return ceiling
+        return y - yIncrement;
+    }
+
+    function renderXaxis() {
+        // save previous context settings & restore them after function
+        ctx.save();
+
         ctx.textBaseline = "ideographic";
         ctx.textAlign = "center";
 
-        let x = textWidth + g;
-        const xIncrement = floorPixel((width - x - p) / (units["x"].length-1));
-        // used for later rendering of graph line
-        var points = [];
+        let cols = [];
+        // col width = (available width - (n-1) * colGap space) / n
+        colWidth = floorPixel(((width - origin.x - p) - (colGap * (units.x.length - 1))) / units.x.length);
 
-        for (let i=0; i < units["x"].length; i++) {
-            // calculate relative pos for later use when drawing graph main lines
-            let pos = {};
-            pos.x = x;
-            pos.y = height - (startY + (values[i] / upperBound) * (endY - startY));
-            
-            points.push(pos);
+        let x = origin.x;
+        for (let i=0; i < units.x.length; i++) {
+
+            let col = {};
+            col.x = x;
+            // all culumns will intially start at the bottom (animation)
+            col.y = origin.y;
+            //column final y value (col ceiling)
+            col.ceil = origin.y + (values.x[i] / maxValue) * (ceiling - origin.y);
+            cols.push(col);
 
             // legend text
             ctx.beginPath();
             ctx.fillStyle = legendColor;
-            ctx.fillText(units["x"][i], x, height - p + floorPixel(p));
+            ctx.fillText(units.x[i], x + colWidth / 2, height);
 
-            x += xIncrement;
+            x += colWidth + colGap;
         }
-        // Main graph columns
+
+        ctx.restore();
+        return cols;
+    }
+
+    function renderGraph() {
+
+        ctx = canvas.getContext("2d");
+
+        // Sizes
         // ==========================================================================
-        ctx.strokeStyle = lineColor;
-        ctx.fillStyle = lineColor;
-        ctx.lineWidth = mainLineWidth;
-        ctx.setLineDash([]);
-        ctx.beginPath();
+        p = ceilPixel(internalPadding * Math.max(width, height));   // padding
+        g = ceilPixel(p / 2);                                       // gap
+        ctx.font = (12 * ratio) + "px " + legendFont;
+    
+        // graph columns
+        colGap = colGapRatio * p;
 
-        // move to the first point
-        ctx.moveTo(points[0].x, points[0].y);
+        // measure required horizontal space for hours
+        maxTextWidth = ceilPixel(ctx.measureText(longestYunit).width);
 
-        for (var i=1; i < points.length - 2; i++) {
-            
-        }
+        origin.y = p;
+        origin.x =  maxTextWidth + g;
+
+        // Render Y axis
+        // ==========================================================================
+        ceiling = renderYaxis();
+
+        // Render X axis
+        // ==========================================================================
+        cols = renderXaxis();
+
+        // Animate main graph columns
+        // ==========================================================================
+        ctx.fillStyle = columnPrimaryClr;
+        ctx.globalAlpha = 0.6;
+        
+        window.requestAnimationFrame(() => {animateColumns(cols)});
     }
 
     function updateCanvasSize() {
         // keep the canvas rendering crisp even on higher pixel ratio (e.g. when zooming)
-        const ratio = window.devicePixelRatio * res;
+        ratio = window.devicePixelRatio * res;
 
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
+        width = canvas.offsetWidth * ratio;
+        height = canvas.offsetHeight * ratio;
 
-        renderGraph(canvas.width, canvas.height, ratio);
+        canvas.width = width;
+        canvas.height = height;
+
+        renderGraph();
     }
     // update canvas everytime the parent size monitor div changes size
     const sizeMonitorDiv = canvas.parentElement;
     new ResizeObserver(updateCanvasSize).observe(sizeMonitorDiv);
-}   
+}

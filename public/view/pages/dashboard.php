@@ -142,6 +142,10 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
                     <div class="graph-area">
                         <div class="graph-size-monitor">
                             <canvas id="work-time-graph" data-graph-data="<?php echo htmlspecialchars(json_encode($group->past_days_work), ENT_QUOTES, 'UTF-8'); ?>"></canvas>
+                            <div class="canvas-tooltip">
+                                <h6>Monday</h6>
+                                <span>28 hours 3 minutes</span>
+                            </div>
                         </div>
                     </div>
                 </div>
