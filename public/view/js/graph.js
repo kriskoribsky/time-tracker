@@ -2,11 +2,17 @@
 // ==========================================================================
 {
     // returns the closest upper bound which is both divisible by multiple & one of line counts
-    function getUpperBound(currentMax, multiple, intervals) {
+    function getUpperBound(max, multiple, intervals) {
+        // if max seconds is 0, return lowest interval
+        if (max === 0) {
+            return [multiple * Math.min(...intervals), Math.max(...intervals)];
+        }
+
         // round up to multiple
-        currentMax = Math.ceil(currentMax / multiple) * multiple;
+        currentMax = Math.ceil(max / multiple) * multiple;
 
         while (true) {
+            console.log(max, multiple, intervals);
             for (let i=0; i < intervals.length; i++) {
                 if (currentMax % intervals[i] === 0) {
                     return [currentMax, currentMax / intervals[i]];
@@ -16,6 +22,7 @@
             currentMax += multiple;
         }
     }
+
     // calculates unit intervals on Yaxis (hrs or min)
     function getYunits(seconds) {
         // get max seconds and convert to minutes
@@ -32,19 +39,20 @@
         if (max <= 60) {
             var [upperBound, increment] = getUpperBound(max, minuteIncrements, intervals);
 
-            for (let i=0; i <= upperBound; i += increment) {
+            for (let i=0; i < upperBound; i += increment) {
             units.push(i + " " + minutesPostfix);
             }
-
+            units.push(upperBound + " " + minutesPostfix);
             upperBound *= 60;
 
         // hours
         } else {
             var [upperBound, increment] = getUpperBound(max / 60, hourIncrements, intervals);
 
-            for (let i=0; i <= upperBound; i += increment) {
+            for (let i=0; i < upperBound; i += increment) {
             units.push(i + " " + hoursPostfix);
             }
+            units.push(upperBound + " " + hoursPostfix);
 
             // convert back to seconds for returning value
             upperBound *= 60 * 60;
@@ -106,10 +114,6 @@
         }
         return max;
     })();
-
-    console.log("xUnits:", units.x);
-    console.log("values:", values.x);
-    console.log("yUnits:", units.y);
 
     // get graph colors (which depend on project group selected in landing page)
     const bodyStyles = window.getComputedStyle(document.body);
@@ -176,9 +180,6 @@
     const tooltipOpacity = 0.7;
 
     canvas.addEventListener("mousemove", event => {
-        // console.log(event.clientX, event.clientY);
-        // console.log(event.offsetX, event.offsetY);
-
         // loop trough columns objects and check for hover
         var over = false;
         for (let i = 0; i < columns.length; i++) {
@@ -281,14 +282,9 @@
         return [cp1x, cp1y, cp2x, cp2y, x2, y2];
     }
     function quadraticBezier(x1, y1, x2, y2) {
-        
-        console.log(`x1: ${x1} y1: ${y1} x2: ${x2} y2: ${y2}`);
-
         // midpoint coords
         sx = Math.abs(x2 + x1) / 2;
         sy = Math.abs(y2 + y1) / 2;
-
-        console.log(`sx: ${sx} sy: ${sy}`);
 
         return [sx, sy, x2, y2];
     }
@@ -352,8 +348,6 @@
                 column.path = path;
                 columns.push(column);
             }
-
-            console.log(columns);
         }
     }
 

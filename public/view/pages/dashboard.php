@@ -2,6 +2,11 @@
 # query DB with group id from this $_SESSION
 $group = Database::query('SELECT * from project_groups WHERE id=:group_id', ['group_id' => $_SESSION['group_id']], PDO::FETCH_OBJ)[0];
 
+if(empty($group)) {
+    session_unset();
+    header('Location: /project-groups');
+}
+
 // query DB again for latest project, task, session data (because they could be updated)
 $queried_projects = Database::query('SELECT * from projects WHERE project_group_id=:group_id ORDER BY date_created DESC', [
     'group_id' => $_SESSION['group_id']
@@ -70,8 +75,6 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
 
 ?>
 
-
-
 <?php require_once Helper\Path::build_path(PUBLIC_PATH, 'view', 'pages', 'inc', 'header.php'); ?>
 
 <div class="main-content">
@@ -118,7 +121,6 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
                             <td><?php echo $project->net_ratio; ?></td>
                         </tr>
 
-
                     </table>
 
                     <div class="controls hidden"></div>
@@ -141,7 +143,9 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
                 <div class="canvas-container">
                     <div class="graph-area">
                         <div class="graph-size-monitor">
-                            <canvas id="work-time-graph" data-graph-data="<?php echo htmlspecialchars(json_encode($group->past_days_work), ENT_QUOTES, 'UTF-8'); ?>"></canvas>
+                            <canvas id="work-time-graph" 
+                            data-graph-data="<?php echo htmlspecialchars(json_encode($group->past_days_work), ENT_QUOTES, 'UTF-8'); ?>">
+                            </canvas>
                             <div id="work-time-tooltip" style="opacity: 0">
                                 <h6 id="tooltip-day">Monday</h6>
                                 <span id="tooltip-data">28 hours 3 minutes</span>
