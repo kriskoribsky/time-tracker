@@ -10,3 +10,4 @@ Date;Group;Project;Task;Start;End;"Total t";Ratio;"Net t";Note;;;;id;task_id;sta
 15-08;Personal;"test 8";"TEST  8 TASK";8:30;17:45;"9 hours 15 minutes";1;"9 hours 15 minutes";;;;;25;8:30;17:45;0;33300;"9 hours 15 minutes";33300;1;33300;"9 hours 15 minutes";33300;;"2022-08-15 15:57:20"
 15-08;Personal;"test 8";asdasd;8:30;17:45;"9 hours 15 minutes";1;"9 hours 15 minutes";;;;;23;8:30;17:45;0;33300;"9 hours 15 minutes";33300;1;33300;"9 hours 15 minutes";33300;;"2022-08-15 15:57:29"
 15-08;Personal;"test 4";hahaa;0:00;23:59;"23 hours 59 minutes";0.65;"15 hours 35 minutes";;;;;22;0:00;23:59;0;86340;"23 hours 59 minutes";86340;0.65;56121;"15 hours 35 minutes";56121;;"2022-08-15 15:58:08"
+15-08;"First group";"test project";"uloha 2";8:30;17:45;"9 hours 15 minutes";0.85;"7 hours 51 minutes";"toto je prva session";;;;27;8:30;17:45;0;33300;"9 hours 15 minutes";33300;0.85;28305;"7 hours 51 minutes";28305;"toto je prva session";"2022-08-15 20:52:48"

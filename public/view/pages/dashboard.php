@@ -116,10 +116,12 @@ $group->net_ratio = $group->get_net_ratio($group_sessions);
                             <td class="text-green"><?php echo Format::format_seconds($project->unpaid_work_time); ?></td>
                         </tr>
 
-                        <tr title="Time spent effectively solely on coding (higher = better)">
-                            <th>Effectivity ratio</th>
-                            <td><?php echo $project->net_ratio; ?></td>
-                        </tr>
+                        <?php if (!empty($project->net_ratio)): ?>
+                            <tr title="Time spent effectively solely on coding (higher = better)">
+                                <th>Effectivity ratio</th>
+                                <td><?php echo $project->net_ratio; ?></td>
+                            </tr>
+                        <?php endif; ?>
 
                     </table>
 

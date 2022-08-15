@@ -69,7 +69,7 @@ foreach ($projects as $project) {
 
                         <div>
                             <label for="project-selection">Project:</label>
-                            <select onchange='if(this.value != 0) { this.form.submit(); }' class="selection-dropdown" name="submit-project" id="project-selection" >
+                            <select onchange='if(this.value != 0) { this.form.submit(); }' class="selection-dropdown" name="submit-project" id="project-selection" <?php echo empty($projects) ? 'disabled' : null ?>>
 
                                 <option value="" disabled hidden <?php echo $_POST['submit-project'] ?? 'selected'; ?>>Choose a project</option>
                                 <?php foreach($projects as $project): ?>

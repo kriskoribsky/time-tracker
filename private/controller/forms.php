@@ -102,7 +102,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     }
                 }
 
-                header('Location: /tasks?m=ok&o=session');
+                header('Location: /tasks?m=ok&o=task');
                 exit();
                 break;
 
