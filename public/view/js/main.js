@@ -175,8 +175,4 @@
             })
         }
     })
-
-
-    // AJAX call to php to query DB for project group primary color value, then change :root primary color & gradient color custom properties
-    
 }

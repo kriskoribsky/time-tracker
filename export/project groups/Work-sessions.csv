@@ -1,0 +1,4 @@
+Formatted;;;;;;;;;;;;;Database
+Date;Group;Project;Task;Start;End;"Total t";Ratio;"Net t";Note;;;;id;task_id;start;end;gross_time;gross_formatted_time;gross_checkout_time;net_time_ratio;net_time;net_formatted_time;net_checkout_time;note;date_created
+15-08;Work;"test 3";sad;8:30;17:45;"9 hours 15 minutes";0.95;"8 hours 47 minutes";asd;;;;16;8:30;17:45;0;33300;"9 hours 15 minutes";33300;0.95;31635;"8 hours 47 minutes";31635;asd;"2022-08-15 15:35:07"
+15-08;Work;"Test project #2";"one single task";1:00;3:00;"2 hours 0 minutes";1;"2 hours 0 minutes";"note here and there";;;;15;1:00;3:00;0;7200;"2 hours 0 minutes";7200;1;7200;"2 hours 0 minutes";7200;"note here and there";"2022-08-15 15:37:49"

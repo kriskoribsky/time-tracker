@@ -23,7 +23,7 @@ const DB_PASS = 'D)2M*pDyuV0IAKqI';
 
 // Backup
 // ==========================================================================
-const EXPORT_DIR = '';
+const EXPORT_PATH = ROOT_PATH . DIRECTORY_SEPARATOR . 'export' . DIRECTORY_SEPARATOR . 'allgroups-sessions.csv';
 
 // App functionality
 // ==========================================================================
