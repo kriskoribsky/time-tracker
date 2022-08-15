@@ -568,6 +568,7 @@ table th, table td {
 
 #work-time-tooltip {
     position: absolute;
+    pointer-events: none;
 
     top: 0;
     left: 0;
@@ -1088,9 +1089,9 @@ input:disabled {
     width: 100%;
 }
 
-.card-header {
+/* .card-header {
 
-}
+} */
 
 .card-header h3 {
     font-size: 2em;
