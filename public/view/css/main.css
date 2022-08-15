@@ -991,12 +991,12 @@ input:disabled {
 
 .fade::before {
     left: 0;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0), 30%, var(--bg-color) 70%);
+    background: linear-gradient(to left, rgba(255, 255, 255, 0), var(--bg-color) 36%);
 }
 
 .fade::after {
     right: 0;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), 30%, var(--bg-color) 70%);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-color) 36%);
 }
 
 .project-groups-container header {
