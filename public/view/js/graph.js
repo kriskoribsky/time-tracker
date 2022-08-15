@@ -12,7 +12,6 @@
         currentMax = Math.ceil(max / multiple) * multiple;
 
         while (true) {
-            console.log(max, multiple, intervals);
             for (let i=0; i < intervals.length; i++) {
                 if (currentMax % intervals[i] === 0) {
                     return [currentMax, currentMax / intervals[i]];
@@ -193,7 +192,7 @@
                     ctx.globalAlpha = 0.6;
 
                     // tooltip data
-                    tooltipDaySpan.textContent = formatDayName(columns[i].day);
+                    tooltipDaySpan.textContent = i === columns.length -1 ? "Today" : formatDayName(columns[i].day);
                     tooltipDataSpan.textContent = formatSeconds(columns[i].data);
 
 
@@ -414,7 +413,17 @@
             // legend text
             ctx.beginPath();
             ctx.fillStyle = legendColor;
-            ctx.fillText(units.x[i], x + colWidth / 2, height);
+
+            // last day with bold font
+            if (i === units.x.length - 1) {
+                ctx.save();
+                ctx.font = "bold " + (12 * ratio) + "px " + legendFont;
+                console.log("bold " + (12 * ratio) + "px " + legendFont);
+                ctx.fillText(units.x[i], x + colWidth / 2, height);
+                ctx.restore();
+            } else {
+                ctx.fillText(units.x[i], x + colWidth / 2, height);
+            }
 
             x += colWidth + colGap;
         }
