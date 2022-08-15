@@ -53,6 +53,30 @@
         return [units, upperBound];
     }
 
+    function formatDayName(day) {
+        const days = {
+            "Mon": "Monday",
+            "Tue": "Tuesday",
+            "Wed": "Wednesday",
+            "Thu": "Thursday",
+            "Fri": "Friday",
+            "Sat": "Saturday",
+            "Sun": "Sunday"
+        }
+
+        return days[day];
+    }
+
+    function formatSeconds(seconds) {
+        var h = Math.floor(seconds / 3600);
+        var m = Math.floor(seconds % 3600 / 60);
+
+        var hoursDisplay = h > 0 ? h + (h === 1 ? " hour" : " hours") : "";
+        var minutesDisplay = m > 0 ? m + (m === 1 ? " minute" : " minutes") : "";
+
+        return hoursDisplay + " " + minutesDisplay;
+    }
+
     // chart data retrieving & manipulation
     // ==========================================================================
     const canvas = document.getElementById("work-time-graph");
@@ -140,39 +164,82 @@
     // Hover tooltip
     // ==========================================================================
     var over;
+    const tooltip = document.getElementById("work-time-tooltip");
+    const tooltipDaySpan = document.getElementById("tooltip-day");
+    const tooltipDataSpan = document.getElementById("tooltip-data");
+    
+    const cssTransformTransitionClass = "transform-tooltip-transition";
+    const classShowTooltipBefore = "tooltip-show-before";
+    const classShowTooltipAfter = "tooltip-show-after";
+
+    let firstTooltip = true;
+    const tooltipOpacity = 0.7;
 
     canvas.addEventListener("mousemove", event => {
         // console.log(event.clientX, event.clientY);
         // console.log(event.offsetX, event.offsetY);
 
         // loop trough columns objects and check for hover
-        over = false;
+        var over = false;
         for (let i = 0; i < columns.length; i++) {
             if (ctx.isPointInPath(columns[i].path, event.offsetX * ratio, event.offsetY * ratio)) {
                 if (!columns[i].hovering) {
 
+                    // hover opacity change
                     ctx.globalAlpha = 0.8;
                     ctx.clearRect(...columns[i].rect);
                     ctx.fill(columns[i].path);
                     ctx.globalAlpha = 0.6;
 
+                    // tooltip data
+                    tooltipDaySpan.textContent = formatDayName(columns[i].day);
+                    tooltipDataSpan.textContent = formatSeconds(columns[i].data);
+
+
+                    // tooltip pos
+                    var xTranslate, yTranslate;
+
+                    if (columns[i].fromLeft) {
+                        xTranslate = columns[i].point.left + 5;
+                        tooltip.classList.add(classShowTooltipBefore);
+                        tooltip.classList.remove(classShowTooltipAfter);
+                    } else {
+                        xTranslate = columns[i].point.left - tooltip.offsetWidth - 5;
+                        tooltip.classList.add(classShowTooltipAfter);
+                        tooltip.classList.remove(classShowTooltipBefore);
+                    }
+
+                    yTranslate = columns[i].point.top - tooltip.offsetHeight/2 + 2;
+                    tooltip.style.transform = "translate(" + xTranslate + "px, " + yTranslate + "px)";
+
                     columns[i].hovering = true;
 
-                    console.log(columns[i].data);
-
-                } else {
-                    over = true;
+                    if (firstTooltip) {
+                        // add transition animation after first transform
+                        setTimeout(() => {
+                            tooltip.classList.add(cssTransformTransitionClass);
+                        }, 300)
+                        firstTooltip = false;
+                    }
                 }
+
+            over = true;
 
             } else {
                 columns[i].hovering = false;
                 ctx.clearRect(...columns[i].rect);
                 ctx.fill(columns[i].path);
             }
-        }
 
-        canvas.style.cursor = over ? "pointer" : "default";
-    })
+        if (over) {
+            canvas.style.cursor = "pointer";
+            tooltip.style.opacity = tooltipOpacity;
+        } else {
+            canvas.style.cursor = "default";
+            tooltip.style.opacity = 0;
+        }
+    }
+})
 
 
     // canvas rendering
@@ -185,6 +252,10 @@
     function ceilPixel(pixels) {
         return Math.ceil(pixels);
     } 
+
+    function halfPixel(pixels) {
+        return Math.floor(pixels) + 0.5;
+    }
 
     function triangleCentroid(x1, x2, y1 ,y2, z1, z2) {
         // centroid of a triagle is anarithmetic mean of its x and y coordinates
@@ -260,7 +331,15 @@
                 let column = {};
                 column.data = values.x[i];
                 column.day = units.x[i];
-                column.point = [cols[i].x + colWidth / 2, cols[i].y];
+
+                let point = {};
+                // devide by ratio go get canvas display pixels instead of redner ones
+                point.left = (cols[i].x + colWidth / 2) / ratio;
+                point.right = (width - cols[i].x - colWidth / 2) / ratio;
+                point.top = (height - cols[i].ceil) / ratio;
+                column.point = point;
+
+                column.fromLeft = !Boolean(Math.round(i / (cols.length-1)));
                 column.rect = [cols[i].x, height - cols[i].ceil, colWidth, cols[i].ceil - origin.y];
                 column.hovering = false;
 
@@ -271,8 +350,6 @@
                 ctx.fill(path);
 
                 column.path = path;
-
-
                 columns.push(column);
             }
 
@@ -287,8 +364,7 @@
         ctx.strokeStyle = legendColor;
         ctx.fillStyle = legendColor;
         // horizontal lines
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4 * ratio, 4 * ratio]);
+        ctx.lineWidth = 1;
 
         // legend text
         ctx.textBaseline = "middle";
@@ -302,12 +378,12 @@
             ctx.fillText(units.y[i], maxTextWidth, height - y);
 
             // dashed line with aplha value
-            ctx.globalAlpha = 0.4;
+            ctx.globalAlpha = 0.3;
 
             ctx.beginPath();
             // little shift (g) to the right for the xAxis legend
-            ctx.moveTo(origin.x - g/2, height - y);
-            ctx.lineTo(width - p + g/2, height - y);
+            ctx.moveTo(halfPixel(origin.x - g/2), halfPixel(height - y));
+            ctx.lineTo(halfPixel(width - p + g/2), halfPixel(height - y));
             ctx.stroke();
             ctx.globalAlpha = 1;
 
