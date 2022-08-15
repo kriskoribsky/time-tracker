@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </label>
 
                 <div class="form-row button-margin">
-                    <button type="submit" name="check-inputs" value="new-session-inputs" class="form-btn btn-secondary">
+                    <button <?php echo empty($tasks) ? 'disabled' : ''; ?> type="submit" name="check-inputs" value="new-session-inputs" class="form-btn btn-secondary">
                         <i class="fa-solid fa-list-check"></i><span>Check</span>
                     </button>
                 </div>
