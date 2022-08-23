@@ -1104,6 +1104,11 @@ input:disabled {
     margin-left: 3em;
 }
 
+.card-body li {
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
 .card-body ul {
     margin-top: 0.4em;
     overflow-y: scroll;
