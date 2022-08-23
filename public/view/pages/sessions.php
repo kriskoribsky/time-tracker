@@ -133,12 +133,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <label>
                         <span>Started: </span>
-                        <input class="time-input" type="text" placeholder="8:30" name="start-time" required>
+                        <input class="time-input" type="text" placeholder="8:30" name="start-time" required autocomplete="off">
                     </label>
                     
                     <label>
                         <span>Finished: </span>
-                        <input class="time-input" type="text" placeholder="17:45" name="end-time" required>
+                        <input class="time-input" type="text" placeholder="17:45" name="end-time" required autocomplete="off">
                     </label>
                     
                     <label class="next-day-checkbox">
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <label title="Ratio of time spent solely on coding compared to googling or other research.">
                         <span>Net coding time : </span>
-                        <input type="number" min="0" max="100" step="5" class="int-input" type="text" name="net-working-time" value="100" required>
+                        <input type="number" min="0" max="100" step="5" class="int-input" type="text" name="net-working-time" value="100" required autocomplete="off">
                         <span>%</span>
                     </label>
                     
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <label>
                     <span>Note: </span>
-                    <input type="text" name="note" placeholder="(optional)">
+                    <input type="text" name="note" placeholder="(optional)" autocomplete="off">
                 </label>
 
                 <div class="form-row button-margin">
@@ -231,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <label title="Ratio of time spent solely on coding compared to googling or other research.">
                             <span>Net coding time : </span>
-                            <input type="number" min="0" max="100" step="5" class="int-input" type="text" value="<?php echo $_POST['net-working-time']; ?>" disabled>
+                            <input type="number" min="0" max="100" step="5" class="int-input" type="text" value="<?php echo $_POST['net-working-time']; ?>" disabled autocomplete="off">
                             <input type="hidden" name="net-working-time" value="<?php echo $_POST['net-working-time']; ?>">
                             <span>%</span>
 
@@ -248,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <label>
                     <span>Note: </span>
-                    <input type="text" value="<?php echo $_POST['note'] ?? null; ?>" disabled>
+                    <input type="text" value="<?php echo $_POST['note'] ?? null; ?>" disabled autocomplete="off">
                     <input type="hidden" name="note" value="<?php echo $_POST['note'] ?? null; ?>">
                 </label>
 
@@ -313,7 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <label title="Ratio of time spent solely on coding compared to googling or other research.">
                         <span>Net coding time : </span>
-                        <input type="number" min="0" max="100" step="5" class="int-input" type="text" name="net-working-time" value="<?php echo $_POST['net-working-time']; ?>" required>
+                        <input type="number" min="0" max="100" step="5" class="int-input" type="text" name="net-working-time" value="<?php echo $_POST['net-working-time']; ?>" required autocomplete="off">
                         <span>%</span>
                     </label>
                     
@@ -323,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <label>
                     <span>Note: </span>
-                    <input type="text" name="note" placeholder="(optional)" value="<?php echo $_POST['note'] ?? null; ?>">
+                    <input type="text" name="note" placeholder="(optional)" value="<?php echo $_POST['note'] ?? null; ?>" autocomplete="off">
                 </label>
 
 

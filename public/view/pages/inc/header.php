@@ -100,7 +100,7 @@
 
                     <form action="">
 
-                        <input type="text" placeholder="Search for..."><button><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <input type="text" placeholder="Search for..." autocomplete="off"><button><i class="fa-solid fa-magnifying-glass"></i></button>
 
                     </form>
 

@@ -21,14 +21,14 @@
                 <p>
                     <label>
                         <span>Group name: </span>
-                        <input name="group-name" type="text" autofocus required>
+                        <input name="group-name" type="text" autofocus required autocomplete="off">
                     </label>
                 </p>
 
                 <p class="color-input">
                     <label>
                         <span>Group color: </span>
-                        <input class="form-color-pick" type="color" name="group-color" value="#4e73df" required>
+                        <input class="form-color-pick" type="color" name="group-color" value="#4e73df" required autocomplete="off">
                     </label>
                 </p>
 
@@ -70,7 +70,7 @@
                 <p>
                     <label>
                         <span>Project name: </span>
-                        <input name="project-name" type="text" autofocus required>
+                        <input name="project-name" type="text" autofocus required autocomplete="off">
                     </label>
                 </p>
 

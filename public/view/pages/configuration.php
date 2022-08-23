@@ -31,7 +31,7 @@ foreach ($config_query as $query) {
                     <label>
                         <span>Salary: </span>
                         <input class="int-input" name="salary" type="number" min="1" max="100" step="0.5" required
-                        value="<?php echo $config['salary_rate']; ?>">
+                        value="<?php echo $config['salary_rate']; ?>" autocomplete="off">
                         <span>€/hour</span>
                     </label>
 
