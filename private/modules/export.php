@@ -30,6 +30,7 @@ class Export {
         'id', 
         'start',
         'end',
+        'next_day',
         'gross_time',
         'gross_formatted_time',
         'gross_checkout_time',
