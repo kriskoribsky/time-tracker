@@ -2,17 +2,17 @@
 Web app for tracking time spent on activities.
 
 # Description
-This app's original intention & goal was to help programmers track their time spent coding at work _(when working remotely)_.
+This app's original intention & goal was to help programmers track their time spent coding at work _(when working remotely)_.<br>
+User creates work sessions which are then stored in database as well as backup .csv local files for later reference.
 
 <!-- # Badges -->
 
 <!-- # Visuals -->
 
 # Installation
-No need for installing anything, app is entirely **web-based** _(including database files)_
+No need for installing anything, app is entirely **web-based**
 
 ### Versions
-- **Bootstrap**: _5.2.0-beta1-dist_
 - **PHP**: _php-8.0.20-Win32-vs16-x64_
 - **Apache**: _httpd-2.4.47-win64-VS16_
 - **MySQL**: _mysql-5.7.33-winx64_
