@@ -1,0 +1,3 @@
+Formatted;;;;;;;;;;;;;Database
+Date;Group;Project;Task;Start;End;"Total t";Ratio;"Net t";Note;;;;id;start;end;next_day;gross_time;gross_formatted_time;gross_checkout_time;net_time_ratio;net_time;net_formatted_time;net_checkout_time;note;date_created
+27-12;Freelance;SamoSabolWeb;landing-page;8:03;8:58;"55 minutes";1;"55 minutes";"project & docker setup";;;;5;8:03;8:58;0;3300;"55 minutes";3300;1;3300;"55 minutes";3300;"project & docker setup";"2022-12-27 19:26:34"
