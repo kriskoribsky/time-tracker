@@ -3,8 +3,8 @@ services:
   phpapache:
     container_name: timetracker-phpapache
     build:
-      context: .
-      dockerfile: PHP-Apache.Dockerfile
+      context: ../
+      dockerfile: ./docker/PHP-Apache.Dockerfile
     depends_on:
       - db
     volumes:

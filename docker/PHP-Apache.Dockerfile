@@ -11,3 +11,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 
 # allow <mod_rewrite.c>
 RUN a2enmod rewrite
+
+# add read/write permissions in website root for exporting database output
+RUN usermod -u 1000 www-data
+RUN usermod -G staff www-data
