@@ -160,36 +160,36 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 
 
-                    // Backup session data to external file
+                    // Backup session data to external file (currently disabled)
                     // ==========================================================================
-                    $task = Database::query('SELECT title, project_id FROM tasks WHERE id=?', [$_POST['task-id']], PDO::FETCH_OBJ)[0];
+                    // $task = Database::query('SELECT title, project_id FROM tasks WHERE id=?', [$_POST['task-id']], PDO::FETCH_OBJ)[0];
 
-                    $project = Database::query('SELECT title, project_group_id FROM projects WHERE id=?', [$task->project_id], PDO::FETCH_OBJ)[0];
+                    // $project = Database::query('SELECT title, project_group_id FROM projects WHERE id=?', [$task->project_id], PDO::FETCH_OBJ)[0];
 
-                    $group = Database::query('SELECT title FROM project_groups WHERE id=?', [$project->project_group_id], PDO::FETCH_OBJ)[0];
+                    // $group = Database::query('SELECT title FROM project_groups WHERE id=?', [$project->project_group_id], PDO::FETCH_OBJ)[0];
 
-                    // backup export values
-                    $db_export = array_merge($placeholder_values, [Date('Y-m-d H:i:s')]);
-                    $readable_export = [
-                        Date('d-m'),
-                        $group->title,
-                        $project->title,
-                        $task->title,
-                        $placeholder_values['start'],
-                        $placeholder_values['end'],
-                        $placeholder_values['gross_formatted_time'],
-                        $placeholder_values['net_time_ratio'],
-                        $placeholder_values['net_formatted_time'],
-                        $placeholder_values['note']
-                    ];
+                    // // backup export values
+                    // $db_export = array_merge($placeholder_values, [Date('Y-m-d H:i:s')]);
+                    // $readable_export = [
+                    //     Date('d-m'),
+                    //     $group->title,
+                    //     $project->title,
+                    //     $task->title,
+                    //     $placeholder_values['start'],
+                    //     $placeholder_values['end'],
+                    //     $placeholder_values['gross_formatted_time'],
+                    //     $placeholder_values['net_time_ratio'],
+                    //     $placeholder_values['net_formatted_time'],
+                    //     $placeholder_values['note']
+                    // ];
 
-                    // export to global sessions .csv file
-                    $global = new Export();
-                    $global->export_session($readable_export, $db_export, Export::THROW_ERROR_ON_MISSING_FILE);
+                    // // export to global sessions .csv file
+                    // $global = new Export();
+                    // $global->export_session($readable_export, $db_export, Export::THROW_ERROR_ON_MISSING_FILE);
 
-                    // export to individual project group sessions.csv file
-                    $group = new Export(ROOT_PATH . '/export/project groups/' .  $group->title . '-sessions.csv');
-                    $group->export_session($readable_export, $db_export, Export::CREATE_MISSING_FILE);
+                    // // export to individual project group sessions.csv file
+                    // $group = new Export(ROOT_PATH . '/export/project groups/' .  $group->title . '-sessions.csv');
+                    // $group->export_session($readable_export, $db_export, Export::CREATE_MISSING_FILE);
 
 
 
