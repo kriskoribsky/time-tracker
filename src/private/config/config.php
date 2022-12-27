@@ -1,5 +1,5 @@
 <?php
-// Paths
+// Paths 
 // ==========================================================================
 // root path = server root + uri
 define('ROOT_PATH', realpath(dirname($_SERVER['DOCUMENT_ROOT'])));
@@ -15,7 +15,7 @@ const HELPERS = ['debug.php', 'path.php'];
 // Database
 // ==========================================================================
 const DB_TYPE = 'mysql';
-const DB_HOST = 'localhost';
+const DB_HOST = 'db';   // The MySQL service named in the docker-compose.yml.
 const DB_NAME = 'time_tracker';
 const DB_CHAR = 'utf8mb4';
 const DB_USER = 'time-tracker-admin';

@@ -1,6 +1,8 @@
 # Index page
 # DirectoryIndex index.php
 
+Redirect /foobar/ https://example.com
+
 # Rewrite rules
 # ==========================================================================
 <IfModule mod_rewrite.c>
