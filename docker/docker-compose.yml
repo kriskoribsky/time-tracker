@@ -10,14 +10,25 @@ services:
     volumes:
       - ../src/:/var/www/html/
     ports:
-      - 8080:80
+      - 8000:80
     restart: always
+
+  phpmyadmin:
+    container_name: timetracker-phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    depends_on:
+        - db
+    ports:
+        - 9000:80
+    restart: always
+    environment:
+        PMA_HOST: db
 
   db:
     container_name: timetracker-mysql
     image: mysql:latest
     ports:
-        - 9906:3306
+        - 10000:3306
     volumes:
       - ../db/:/var/lib/mysql/
     restart: always
@@ -26,14 +37,3 @@ services:
         MYSQL_DATABASE: time_tracker
         MYSQL_USER: time-tracker-admin
         MYSQL_PASSWORD: D)2M*pDyuV0IAKqI
-  
-  phpmyadmin:
-    container_name: timetracker-phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
-    depends_on:
-        - db
-    ports:
-        - 9907:80
-    restart: always
-    environment:
-        PMA_HOST: db
