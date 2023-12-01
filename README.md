@@ -10,7 +10,7 @@ User creates work sessions which are then stored in database as well as backup .
 <!-- # Visuals -->
 
 # Installation
-No need for installing anything, app is entirely **web-based**
+No need for installing anything, app is entirely **web-based**.
 
 ### Versions
 - **PHP**: _php-8.0.20-Win32-vs16-x64_
